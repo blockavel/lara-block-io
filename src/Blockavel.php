@@ -7,7 +7,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 class Blockavel
 {
     protected $blockIo;
-    
     /**
      * Instantiating the BlockIo Class passing the API key, the pin, 
      * and the API version.
@@ -505,5 +504,79 @@ class Blockavel
                 $cnt++;
             }
         }
+    }
+    
+    protected function createPassphrases($passphrases_array)
+    {
+        $passphrases = [];
+        
+        foreach(array_values($passphrases_array) as $passphrase)
+        {
+            $passphrases[] = strToHex($passphrase);
+        }
+        
+        return $passphrases;
+    }
+    
+    protected function createKeys($passphrases)
+    {
+        $keys = [];
+        
+        foreach(array_values($passphrases) as $passphrase)
+        {
+            $keys[] = $this->blockIo
+                           ->initKey()
+                           ->fromPassphrase($passphrase)
+                           ->getPublicKey();
+        }
+        
+        return $keys;
+        
+    }
+    
+    public function createMultiSigAddress(
+                        $s1 = null, 
+                        $s2 = null, 
+                        $s3 = null,
+                        $s4 = null,
+                        $s5 = null
+                    )
+    {
+        $passphrases_array = [];
+        
+        if(!is_null($s5)) array_push($passphrases_array, $s5);
+        if(!is_null($s4)) array_push($passphrases_array, $s4);
+        if(!is_null($s3)) array_push($passphrases_array, $s3);
+        if(!is_null($s2)) array_push($passphrases_array, $s2);
+        if(!is_null($s1)) array_push($passphrases_array, $s1);
+        
+        $passphrases = $this->createPassphrases($passphrases_array);
+        
+        $keys = $this->createKeys($passphrases);
+        
+        return $pubKeyStr = implode(',', $keys);
+        
+        return $dTrustAddress = $block_io
+                                    ->get_new_dtrust_address(
+                                        array(
+                                            'label' => $label, 
+                                            'public_keys' => $pubKeyStr, 
+                                            'required_signatures' => $cnt 
+                                        )
+                                    );
+        
+        /*echo "*** Creating Address with 4 Signers, and 3 Required Signatures: " . "\n";
+        
+        try {
+            $response = $block_io->get_new_dtrust_address(array('label' => 'dTrust1', 'public_keys' => $pubKeyStr, 'required_signatures' => 3 ));
+            $dTrustAddress = $response->data->address;
+        } catch (Exception $e) {
+        
+            // print the exception below for debugging
+            // echo "Exception: " . $e->getMessage() . "\n";
+            
+            // the label must exist, let's get its address then
+            $dTrustAddress = $block_io->get_dtrust_address_by_label(array('label' => 'dTrust1'))->data->address;
+        }*/
     }
 }
