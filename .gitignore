@@ -1,3 +1,21 @@
+<<<<<<< HEAD
 composer.lock
 phpunit.xml
 vendor
+=======
+vendor/
+node_modules/
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific
+bootstrap/cache/
+.env.*.php
+.env.php
+.env
+
+# Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
+.rocketeer/
+>>>>>>> 809ed3247fbef4b6a71bc2d10fc4b3de2a367580
