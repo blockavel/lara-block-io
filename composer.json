@@ -1,0 +1,19 @@
+{
+    "name": "blockavel/blockavel",
+    "description": "Laravel package for the Block.io API",
+    "type": "laravel package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alejandro Carstens",
+            "email": "acarste@okstate.edu"
+        }
+        {
+            "name": "Kaushik Subramaniam Gnanaskandan",
+            "email": "kaushik.subman@gmail.com"
+        }
+    ],
+    "require": {
+        "block_io-php/block_io-php": "^1.1"
+    }
+}
