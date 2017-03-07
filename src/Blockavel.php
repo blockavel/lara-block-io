@@ -535,6 +535,8 @@ class Blockavel
     }
     
     public function createMultiSigAddress(
+                        $label,
+                        $reqSigs,
                         $s1 = null, 
                         $s2 = null, 
                         $s3 = null,
@@ -554,29 +556,21 @@ class Blockavel
         
         $keys = $this->createKeys($passphrases);
         
-        return $pubKeyStr = implode(',', $keys);
+        $pubKeyStr = implode(',', $keys);
         
-        return $dTrustAddress = $block_io
-                                    ->get_new_dtrust_address(
-                                        array(
-                                            'label' => $label, 
-                                            'public_keys' => $pubKeyStr, 
-                                            'required_signatures' => $cnt 
-                                        )
-                                    );
-        
-        /*echo "*** Creating Address with 4 Signers, and 3 Required Signatures: " . "\n";
-        
-        try {
-            $response = $block_io->get_new_dtrust_address(array('label' => 'dTrust1', 'public_keys' => $pubKeyStr, 'required_signatures' => 3 ));
-            $dTrustAddress = $response->data->address;
-        } catch (Exception $e) {
-        
-            // print the exception below for debugging
-            // echo "Exception: " . $e->getMessage() . "\n";
-            
-            // the label must exist, let's get its address then
-            $dTrustAddress = $block_io->get_dtrust_address_by_label(array('label' => 'dTrust1'))->data->address;
-        }*/
+        return $this->blockIo->get_new_dtrust_address(
+                                    array(
+                                        'label' => $label, 
+                                        'public_keys' => $pubKeyStr, 
+                                        'required_signatures' => $reqSigs 
+                                    )
+                                );
     }
+    
+    public function getDTrustAddressByLabel($array)
+    {
+        return $this->blockIo->get_dtrust_address_by_label($array);
+    }
+    
+    
 }
