@@ -228,7 +228,7 @@ class Blockavel
      *     )
      */
      
-    public function withdrawFromAdresses($array)
+    public function withdrawFromAddresses($array)
     {
         return $this->blockIo->withdraw_from_addresses(
                     $this->setAmountsPrecision($array)
@@ -540,13 +540,11 @@ class Blockavel
                         $s1 = null, 
                         $s2 = null, 
                         $s3 = null,
-                        $s4 = null,
-                        $s5 = null
+                        $s4 = null
                     )
     {
         $passphrases_array = [];
-        
-        if(!is_null($s5)) array_push($passphrases_array, $s5);
+
         if(!is_null($s4)) array_push($passphrases_array, $s4);
         if(!is_null($s3)) array_push($passphrases_array, $s3);
         if(!is_null($s2)) array_push($passphrases_array, $s2);
@@ -567,10 +565,17 @@ class Blockavel
                                 );
     }
     
-    public function getDTrustAddressByLabel($array)
+    public function getDTrustInfoByLabel($array)
     {
         return $this->blockIo->get_dtrust_address_by_label($array);
     }
     
-    
+    public function multiSigWithdraw($array)
+    {
+        return $this->blockIo->withdraw_from_dtrust_address(
+                                    array('from_labels' => 'dTrust1', 
+                                    'to_addresses' => $destAddress, 
+                                    'amounts' => '2.0'
+                                ));
+    }
 }
