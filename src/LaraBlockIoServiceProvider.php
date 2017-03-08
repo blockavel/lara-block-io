@@ -25,7 +25,7 @@ class LaraBlockIoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('larablockio', function() {
+        $this->app->bind('lara-block-io', function() {
             return new LaraBlockIo;
         });
     }
