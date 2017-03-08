@@ -7,7 +7,7 @@
     class LaraBlockIoFacade extends Facade
     {
         protected static function getFacadeAccessor() {
-            return 'larablockio';
+            return 'lara-block-io';
         }
     }
 
