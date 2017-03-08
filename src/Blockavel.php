@@ -455,21 +455,70 @@ class Blockavel
     }
     
     /**
-     * Look for an incoming transactions, and know when they are done based on  
-     * the confidence treshold. Returns true if the transactions are done.
+     * Look for incoming transactions, and know when they have been processed.
+     * Returns true if the transactions are done.
+     * 
+     * We can do the number of pending transactions related to an adress, and 
+     * calculate the expcted amount ourselves. Just asking for the 
+     * confidence treshold and the recipient adress as inputs.
      */
-     
-    public function confirmed($toAddress, $expectedAmount, $confidenceThreshold)
+    
+    public function getNotConfirmedTxs($toAddress, $confidenceThreshold)
+    {
+        $txs = $this->getTransactions(
+                        array('addresses' => $toAddress, 'type' => 'received')
+                   )->data->txs;
+        
+        $txs = array_where($txs, function($value) use ($confidenceThreshold){
+                        if($value->confidence < $confidenceThreshold)
+                        {
+                            return $value;
+                        }
+                });
+        
+        return $txs;
+        
+    }
+    
+    public function getExpectedAmount($toAddress, $confidenceThreshold)
+    {
+        $expectedAmount = 0;
+        
+        $txs = $this->getNotConfirmedTxs($toAddress, $confidenceThreshold);
+
+        foreach($txs  as $tx)
+        {
+            foreach($tx->amounts_received as $amountReceived)
+            {
+                $expectedAmount += $amountReceived->amount;
+            }
+        }
+        
+        return $expectedAmount;
+        
+    }
+    
+    /*Check this function
+    
+    public function confirmed($toAddress, $confidenceThreshold)
     {   
         $cnt = 0;
         
+        $expectedAmount = $this->getExpectedAmount(
+                                    $toAddress, 
+                                    $confidenceThreshold
+                                );
+                                
+        $txs = $this->getNotConfirmedTxs(
+                                $toAddress, 
+                                $confidenceThreshold
+                          );
         while(true)
         {
-            $txs = $this->getTransactions(
-                        array('addresses' => $toAddress, 'type' => 'received')
-                   )->data->txs;
             
             $paymentReceived = '0.0';
+            
+            
 
             foreach($txs as $tx)
             {
@@ -504,7 +553,7 @@ class Blockavel
                 $cnt++;
             }
         }
-    }
+    } */
     
     protected function createPassphrases($passphrases_array)
     {
@@ -570,12 +619,19 @@ class Blockavel
         return $this->blockIo->get_dtrust_address_by_label($array);
     }
     
-    public function multiSigWithdraw($array)
+    protected function multiSigWithdraw($array)
     {
-        return $this->blockIo->withdraw_from_dtrust_address(
-                                    array('from_labels' => 'dTrust1', 
-                                    'to_addresses' => $destAddress, 
-                                    'amounts' => '2.0'
-                                ));
+        return $this->blockIo->withdraw_from_dtrust_address($array);
     }
+    
+    public function multiWithdraw($array)
+    {
+        return $this->multiSigWithdraw($array);
+    }
+    
+    public function getAvailableMethods()
+    {
+        return get_class_methods('BlockKey');
+    }
+    
 }
