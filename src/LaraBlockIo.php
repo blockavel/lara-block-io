@@ -7,6 +7,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 class LaraBlockIo
 {
     protected $blockIo;
+    
     /**
      * Instantiating the BlockIo Class passing the API key, the pin,
      * and the API version.
@@ -62,28 +63,9 @@ class LaraBlockIo
      * Ex: $array = array('label' => 'USER1')
      */
 
-    public function createAddress($array)
+    public function createAddress($label)
     {
-        return $this->blockIo->get_new_address($array);
-    }
-
-    /**
-     * Get information assoiciated with a given address
-     */
-
-    public function getAddressString($address)
-    {
-        return $address->data->address;
-    }
-
-    public function getAddressLabel($address)
-    {
-        return $address->data->label;
-    }
-
-    public function getUserId($address)
-    {
-        return $address->data->user_id;
+        return $this->blockIo->get_new_address(['label' => $label]);
     }
 
     /**
@@ -130,20 +112,52 @@ class LaraBlockIo
      * Ex: $array = array('addresses' => 'ADDRESS1,ADDRESS2,...')
      */
 
-    public function getAddressBalance($array)
+    public function getAddressBalanceByAddress($addresses)
     {
-        return $this->blockIo->get_address_balance($array);
+        return $this->blockIo->get_address_balance(['addresses' => $addresses]);
     }
-
+    
+    public function getAddressBalanceByLabel($labels)
+    {
+        return $this->blockIo->get_address_balance(['label' => $labels]);
+    }
+    
     /**
      * Get address by label.
      */
 
-    public function getAddressByLabel($array)
+    public function getAddressByLabel($label)
     {
-        return $this->blockIo->get_address_by_label($array);
+        return $this->blockIo->get_address_by_label(['label' => $label]);
     }
-
+    
+    /**
+     * Get all users.
+     */
+     
+    public function getUsers()
+    {
+        return $this->blockIo->get_users();
+    }
+    
+    /**
+     * Get a user's balance
+     */
+    
+    public function getUserBalance($userId)
+    {
+        return $this->blockIo->get_user_balance(['user_id' => $userId]);
+    }
+    
+    /**
+     * Get a user's address
+     */
+     
+    public function getUserAddress($userId)
+    {
+        return $this->blockIo->get_user_address(['user_id' => $userId]);
+    }
+    
     /**
      * Verifying the presicion of the provided amounts.
      * It is important to have the php7.0-bcmath package installed.
@@ -182,10 +196,13 @@ class LaraBlockIo
      *             )
      */
 
-    public function getNetworkFeeEstimate($array)
+    public function getNetworkFeeEstimate($amounts, $addresses)
     {
         return $this->blockIo->get_network_fee_estimate(
-                    $this->setAmountsPrecision($array)
+                    $this->setAmountsPrecision([
+                        'amounts' => $amounts,
+                        'to_addresses' => $addresses
+                    ])
                );
     }
 
@@ -207,8 +224,14 @@ class LaraBlockIo
      *          )
      */
 
-    public function withdraw($array)
+    public function withdraw($amounts, $toAddresses, $nonce = null)
     {
+        $array = [
+            'amounts' => $amounts, 
+            'to_addresses' => $toAddresses,
+            'nonce' => $nonce
+        ];
+        
         return $this->blockIo->withdraw(
                     $this->setAmountsPrecision($array)
                );
@@ -228,8 +251,17 @@ class LaraBlockIo
      *     )
      */
 
-    public function withdrawFromAddresses($array)
+    public function withdrawFromAddresses(
+        $amounts, $fromAddresses, $toAddresses, $nonce = null
+    )
     {
+        $array = [
+            'amounts' => $amounts,
+            'from_addresses' => $fromAddresses,
+            'to_addresses' => $toAddresses,
+            'nonce' => $nonce
+        ];
+        
         return $this->blockIo->withdraw_from_addresses(
                     $this->setAmountsPrecision($array)
                );
@@ -259,48 +291,37 @@ class LaraBlockIo
      *     )
      */
 
-    public function withdrawFromLabels($array)
+    public function withdrawFromLabelsToLabels(
+        $amounts, $fromLabels, $toLabels, $nonce = null)
     {
+        $array = [
+            'amounts' => $amounts,
+            'from_labels' => $fromLabels,
+            'to_labels' => $toLabels,
+            'nonce' => $nonce
+        ];
+        
         return $this->blockIo->withdraw_from_labels(
                     $this->setAmountsPrecision($array)
                );
 
     }
-
-    /**
-     * Get transactions information.
-     */
-
-    public function getTransactionInfo($transaction)
+    
+    public function withdrawFromLabelsToAddresses(
+        $amounts, $fromLabels, $toAddresses, $nonce = null)
     {
-        return $transaction->data;
-    }
+        $array = [
+            'amounts' => $amounts,
+            'from_labels' => $fromLabels,
+            'to_labels' => $toAddresses,
+            'nonce' => $nonce
+        ];
+        
+        return $this->blockIo->withdraw_from_labels(
+                    $this->setAmountsPrecision($array)
+               );
 
-    public function getTxid($transaction)
-    {
-        return $this->getTransactionInfo($transaction)->txid;
     }
-
-    public function getAmountWithdrawn($transaction)
-    {
-        return $this->getTransactionInfo($transaction)->amount_withdrawn;
-    }
-
-    public function getAmountSent($transaction)
-    {
-        return $this->getTransactionInfo($transaction)->amount_sent;
-    }
-
-    public function getTransactionNetworkFee($transaction)
-    {
-        return $this->getTransactionInfo($transaction)->network_fee;
-    }
-
-    public function getBlockIoFee($transaction)
-    {
-        return $this->getTransactionInfo($transaction)->blockio_fee;
-    }
-
     /**
      * Archiving of addresses help you control account bloat due to a large
      * number of addresses. When an address is archived, it is:
@@ -326,11 +347,24 @@ class LaraBlockIo
      * $array = array('labels' => 'LABEL1,LABEL2,...')
      */
 
-    public function archiveAdresses($array)
+    public function archiveAddressesByAddress($addresses)
     {
+        $array = [
+            'addresses' => $addresses
+        ];
+        
         return $this->blockIo->archive_addresses($array);
     }
-
+    
+    public function archiveAddressesByLabel($labels)
+    {
+        $array = [
+            'labels' => $labels
+        ];
+        
+        return $this->blockIo->archive_addresses($array);
+    }
+    
     /**
      * Unarchives upto 100 addresses in a single API call. Addresses can be
      * specified by their labels.
@@ -346,11 +380,24 @@ class LaraBlockIo
      * $array = array('labels' => 'LABEL1,LABEL2,...')
      */
 
-    public function unarchiveAddresses($array)
+    public function unarchiveAddressesByAddress($addresses)
     {
+        $array = [
+            'addresses' => $addresses
+        ];
+        
         return $this->blockIo->unarchive_addresses($array);
     }
-
+    
+    public function unarchiveAddressesByLabel($labels)
+    {
+        $array = [
+            'labels' => $labels
+        ];
+        
+        return $this->blockIo->unarchive_addresses($array);
+    }
+    
     /**
      * Returns all the archived addresses, their labels, and user ids on your
      * account.
@@ -400,24 +447,102 @@ class LaraBlockIo
      *
      */
 
-    public function getTransactions($array)
-    {
+    public function getTransactionsByAddresses(
+        $type, $addresses, $beforeTx = null
+    )
+    {   
+        if(is_null($beforeTx))
+        {
+            $array = [
+                'type' => $type,
+                'addresses' => $addresses,
+            ];    
+        }
+        else
+        {
+            $array = [
+                'type' => $type,
+                'addresses' => $addresses,
+                'before_tx' => $beforeTx,
+            ];
+        }
+        
         return $this->blockIo->get_transactions($array);
     }
-
-    public function getAddressTranscations($array)
-    {
-        return $this->blockIo->get_address_balance($array);
+    
+    public function getTransactionsByLabels(
+        $type, $labels, $beforeTx = null
+    )
+    {   
+        if(is_null($beforeTx))
+        {
+            $array = [
+                'type' => $type,
+                'labels' => $labels
+            ];
+        }
+        else
+        {
+            $array = [
+                'type' => $type,
+                'before_tx' => $beforeTx,
+                'labels' => $labels
+            ];
+        }
+        
+        return $this->blockIo->get_transactions($array);
     }
-
+    
+    public function getTransactionsByUserIds(
+        $type, $userIds, $beforeTx = null
+    )
+    {   
+        if(is_null($beforeTx))
+        {
+            $array = [
+                'type' => $type,
+                'user_ids' => $userIds
+            ];
+        }
+        else
+        {
+            $array = [
+                'type' => $type,
+                'before_tx' => $beforeTx,
+                'user_ids' => $userIds
+            ];
+        }
+        
+        return $this->blockIo->get_transactions($array);
+    }
+    
+    public function getReceivedTransactions($beforeTx = null)
+    {
+        if(is_null($beforeTx)) $array = ['type' => 'received'];
+        else $array = ['type' => 'received', 'before_tx' => $beforeTx];
+        
+        return $this->blockIo->get_transactions($array);
+    }
+    
+    public function getSentTransactions($beforeTx = null)
+    {
+        if(is_null($beforeTx)) $array = ['type' => 'sent'];
+        else $array = ['type' => 'sent', 'before_tx' => $beforeTx];
+        
+        return $this->blockIo->get_transactions($array);
+    }
+    
+    
     /**
      * Returns the prices from the largest exchanges for Bitcoin, Dogecoin,
      * or Litecoin, specified by the API Key. Specifying the base
      * currency is optional.
      */
 
-    public function getCurrentPrice($array = array())
+    public function getCurrentPrice($baseCurrency = null)
     {
+        if(!is_null($baseCurrency)) $array = ['price_base' => $baseCurrency];
+        
         return $this->blockIo->get_current_price($array);
     }
 
@@ -430,10 +555,14 @@ class LaraBlockIo
      *
      * array('addresses' => 'ADDRESS1,ADDRESS2,...')
      *
+     * Not working properly.
+     * 
      */
 
-    public function isGreenAdress($array)
+    public function isGreenAddress($addresses)
     {
+        $array = ['addresses' => $addresses];
+        
         return $this->blockIo->is_green_address($array);
     }
 
@@ -449,8 +578,10 @@ class LaraBlockIo
      * array('transaction_ids' => 'TXID1,TXID2,...')
      */
 
-    public function isGreenTransaction($array)
+    public function isGreenTransaction($txIds)
     {
+        $array = ['transaction_ids' => $txIds];
+        
         return $this->blockIo->is_green_transaction($array);
     }
 
@@ -465,12 +596,19 @@ class LaraBlockIo
 
     public function getNotConfirmedTxs($toAddress, $confidenceThreshold)
     {
-        $txs = $this->getTransactions(
+        $txs = $this->blockIo->get_transactions(
                         array('addresses' => $toAddress, 'type' => 'received')
                    )->data->txs;
-
+        
         $txs = array_where($txs, function($value) use ($confidenceThreshold){
-                        if($value->confidence < $confidenceThreshold)
+                        if($value->confidence < $confidenceThreshold 
+                            && $value->from_green_address == true)
+                        {
+                            return $value;
+                        }
+                        elseif($value->confidence < $confidenceThreshold
+                            || ($value->from_green_address == false
+                            && $value->confirmations < 3))
                         {
                             return $value;
                         }
@@ -479,82 +617,15 @@ class LaraBlockIo
         return $txs;
 
     }
-
-    public function getExpectedAmount($toAddress, $confidenceThreshold)
+    /**
+     * Get all dTrust addresses
+     */
+     
+    public function getDTrustAddresses()
     {
-        $expectedAmount = 0;
-
-        $txs = $this->getNotConfirmedTxs($toAddress, $confidenceThreshold);
-
-        foreach($txs  as $tx)
-        {
-            foreach($tx->amounts_received as $amountReceived)
-            {
-                $expectedAmount += $amountReceived->amount;
-            }
-        }
-
-        return $expectedAmount;
-
+        return $this->blockIo->get_my_dtrust_addresses();
     }
-
-    /*Check this function
-
-    public function confirmed($toAddress, $confidenceThreshold)
-    {
-        $cnt = 0;
-
-        $expectedAmount = $this->getExpectedAmount(
-                                    $toAddress,
-                                    $confidenceThreshold
-                                );
-
-        $txs = $this->getNotConfirmedTxs(
-                                $toAddress,
-                                $confidenceThreshold
-                          );
-        while(true)
-        {
-
-            $paymentReceived = '0.0';
-
-
-
-            foreach($txs as $tx)
-            {
-                foreach($tx->amounts_received as $amountReceived)
-                {
-                    if ($amountReceived->recipient == $toAddress)
-                    {
-            		   if ($tx->confidence >= $confidenceThreshold)
-            		   {
-            		      $paymentReceived = bcadd(
-                                		          $amountReceived->amount,
-                                		          $paymentReceived, 8
-                                		     );
-            		   }
-                    }
-                }
-            }
-
-            if (bccomp($paymentReceived, $expectedAmount,8) >= 0)
-            {
-                return true;
-            } else {
-                if($cnt > 10)
-                {
-                    return 'Amount Pending: ' .
-                            bccomp($paymentReceived, $expectedAmount,8) .
-                            PHP_EOL . 'Amount Received: ' . $paymentReceived .
-                            'Amount Expected: ' . $expectedAmount;
-                }
-
-                sleep(1);
-                $cnt++;
-            }
-        }
-    } */
-
+     
     protected function createPassphrases($passphrases_array)
     {
         $passphrases = [];
@@ -614,24 +685,260 @@ class LaraBlockIo
                                 );
     }
 
-    public function getDTrustInfoByLabel($array)
+    public function getDTrustInfoByLabel($label)
     {
+        $array = ['label' => $label];
+        
         return $this->blockIo->get_dtrust_address_by_label($array);
     }
 
-    protected function multiSigWithdraw($array)
+    public function multiSigWithdraw($label, $toAddress, $amount)
     {
-        return $this->blockIo->withdraw_from_dtrust_address($array);
+        $array = [
+            'from_labels' => $label, 
+            'to_addresses' => $toAddress, 
+            'amounts' => $amount
+        ];
+        
+        $response = $this->blockIo->withdraw_from_dtrust_address($array);
+        
+        $reference_id = $response->data->reference_id;
+        
+        return compact('response', 'reference_id');
     }
-
-    public function multiWithdraw($array)
+    
+    /**
+     * Returns the pending withdrawal from a MultiSig address. Receives the
+     * following parameter:
+     * 
+     * array('reference_id' => 'REFERENCEID') 
+     */ 
+    
+    protected function getKey($passphrase)
     {
-        return $this->multiSigWithdraw($array);
+        return $this->blockIo->initKey()->fromPassphrase(strToHex($passphrase));
     }
-
-    public function getAvailableMethods()
+    
+    protected function signDTrust($response)
     {
-        return get_class_methods('BlockKey');
-    }
+        $json_string = json_encode($response->data->details);
 
+    	return $this->blockIo->sign_transaction(
+    	                            array('signature_data' => $json_string)
+    	                       );
+    }
+    
+    protected function getSigCount($reference_id)
+    {
+        $array = array('reference_id' => $reference_id);
+        
+        $response = $this->getMultiSigWithdraw($array)->data->details;
+        
+        if($response->more_signatures_needed)
+        {
+            $count = 0;
+            
+            foreach($response->inputs as $input)
+            {
+                $count += $input->signatures_needed;
+            }
+            
+            return $count;
+        }
+        else return 0;
+    }
+    
+    protected function closeMultiSigTxs($reference_id)
+    {
+        return $this->blockIo->finalize_transaction(
+                                    array('reference_id' => $reference_id)
+                               );
+    }
+    
+    public function getMultiSigWithdraw($array)
+    {
+        return $this->blockIo->get_remaining_signers($array);
+    }
+    
+    public function signMultiSigWithdraw($reference_id, $passphrase)
+    {
+        $array = array('reference_id' => $reference_id);
+        
+        $response = $this->getMultiSigWithdraw($array);
+                           
+        $key = $this->getKey($passphrase);
+        
+        $signature = &$key;
+                           
+        foreach($response->data->details->inputs as &$input)
+        {   
+            $dataToSign = $input->data_to_sign;
+            
+            foreach($input->signers as &$signer)
+            {
+                if($signer->signer_public_key == $signature->getPublicKey())
+                {
+                    $signer->signed_data = $signature->signHash($dataToSign);
+                    break;
+                }
+            }
+        }
+        
+        $this->signDTrust($response);
+        
+        $reqSigs = $this->getSigCount($reference_id);
+        
+        if($reqSigs == 0)
+        {
+            return $this->closeMultiSigTxs($reference_id);
+        }
+        
+        return $reqSigs;
+    }
+    
+    public function getSentDTrustTransactions($beforeTx = null)
+    {
+        if(is_null($beforeTx)) $array = ['type' => 'sent'];
+        else $array = ['type' => 'sent', 'before_tx' => $beforeTx];
+        
+        return $this->blockIo->get_dtrust_transactions($array);
+    }
+    
+    public function getReceivedDTrustTransactions($beforeTx = null)
+    {
+        if(is_null($beforeTx)) $array = ['type' => 'received'];
+        else $array = ['type' => 'received', 'before_tx' => $beforeTx];
+        
+        return $this->blockIo->get_dtrust_transactions($array);
+    }
+    
+    public function getDtrustTransactionsByAddress(    
+        $type, $addresses, $beforeTx = null
+    )
+    {   
+        if(is_null($beforeTx))
+        {
+            $array = [
+                'type' => $type,
+                'addresses' => $addresses,
+            ];    
+        }
+        else
+        {
+            $array = [
+                'type' => $type,
+                'addresses' => $addresses,
+                'before_tx' => $beforeTx,
+            ];
+        }
+        
+        return $this->blockIo->get_dtrust_transactions($array);
+    }
+    
+    public function getDtrustTransactionsByLabel(
+        $type, $labels, $beforeTx = null)
+    {
+        if(is_null($beforeTx))
+        {
+            $array = [
+                'type' => $type,
+                'labels' => $labels
+            ];
+        }
+        else
+        {
+            $array = [
+                'type' => $type,
+                'before_tx' => $beforeTx,
+                'labels' => $labels
+            ];
+        }
+        
+        return $this->blockIo->get_dtrust_transactions($array);
+    }
+    
+    public function getDTrustTransactionsByUserIds(
+        $type, $userIds, $beforeTx = null
+    )
+    {   
+        if(is_null($beforeTx))
+        {
+            $array = [
+                'type' => $type,
+                'user_ids' => $userIds
+            ];
+        }
+        else
+        {
+            $array = [
+                'type' => $type,
+                'before_tx' => $beforeTx,
+                'user_ids' => $userIds
+            ];
+        }
+        
+        return $this->blockIo->get_dtrust_transactions($array);
+    }
+    
+    public function getDTrustAddressBalance($addresses)
+    {
+        $array = ['addresses' => $addresses];
+        
+        return $this->blockIo->get_dtrust_address_balance($array);
+    }
+    
+    public function archiveDTrustAddress($addresses)
+    {
+        $array = ['addresses' => $addresses];
+        
+        return $this->blockIo->archive_dtrust_address($array);
+    }
+    
+    public function unarchiveDTrustAddress($addresses)
+    {
+        $array = ['addresses' => $addresses];
+        
+        return $this->blockIo->unarchive_dtrust_address($array);
+    }
+    
+    public function getArchivedDTrustAddresses()
+    {
+        return $this->blockIo->get_my_archived_dtrust_addresses();
+    }
+    
+    public function getNetworkDTrustFeeEstimate(
+        $amounts, $fromAddress, $toAddress)
+    {
+        return $this->blockIo->get_dtrust_network_fee_estimate([
+                        'amounts' => $amounts,
+                        'from_addresses' => $fromAddress,
+                        'to_addresses' => $toAddress
+                    ]);
+    }
+    
+    public function sweepFromAddress($from_address, $to_address, $private_key)
+    {
+        return $this->blockIo->sweep_from_address(
+                                    array('from_address' => $from_address, 
+                                    'to_address' => $to_address, 
+                                    'private_key' => $private_key)
+                               );
+    }
+    
 }
+
+/**
+   BlockIos List of Available Methods
+   BlockIo.PASSTHROUGH_METHODS = [
+      'get_address_received',
+      'create_user', '',
+      'get_user_received',
+      'sign_and_finalize_withdrawal',
+    ];
+
+    // withdrawal methods that need local signing
+    BlockIo.WITHDRAWAL_METHODS = [
+      'withdraw_from_users',
+    ];
+
+*/
