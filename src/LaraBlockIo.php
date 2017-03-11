@@ -313,7 +313,7 @@ class LaraBlockIo
         $array = [
             'amounts' => $amounts,
             'from_labels' => $fromLabels,
-            'to_labels' => $toAddresses,
+            'to_addresses' => $toAddresses,
             'nonce' => $nonce
         ];
         
