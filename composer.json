@@ -1,7 +1,7 @@
 {
     "name": "blockavel/lara-block-io",
     "description": "Laravel package for the Block.io API",
-    "type": "laravel package",
+    "keyword": ["laravel", "blockio"],
     "license": "MIT",
     "authors": [
         {
