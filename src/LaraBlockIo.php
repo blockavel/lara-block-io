@@ -2,8 +2,6 @@
 
 namespace Blockavel\LaraBlockIo;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
 class LaraBlockIo
 {
     protected $blockIo;

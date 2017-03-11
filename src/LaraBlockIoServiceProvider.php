@@ -16,6 +16,8 @@ class LaraBlockIoServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/main.php' => config_path('larablockio.php'),
         ]);
+
+        require __DIR__ . '/../vendor/autoload.php';
     }
 
     /**
