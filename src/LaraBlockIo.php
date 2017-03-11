@@ -7,7 +7,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 class LaraBlockIo
 {
     protected $blockIo;
-    
+
     /**
      * Instantiating the BlockIo Class passing the API key, the pin,
      * and the API version.
@@ -116,12 +116,12 @@ class LaraBlockIo
     {
         return $this->blockIo->get_address_balance(['addresses' => $addresses]);
     }
-    
+
     public function getAddressBalanceByLabel($labels)
     {
         return $this->blockIo->get_address_balance(['label' => $labels]);
     }
-    
+
     /**
      * Get address by label.
      */
@@ -130,34 +130,34 @@ class LaraBlockIo
     {
         return $this->blockIo->get_address_by_label(['label' => $label]);
     }
-    
+
     /**
      * Get all users.
      */
-     
+
     public function getUsers()
     {
         return $this->blockIo->get_users();
     }
-    
+
     /**
      * Get a user's balance
      */
-    
+
     public function getUserBalance($userId)
     {
         return $this->blockIo->get_user_balance(['user_id' => $userId]);
     }
-    
+
     /**
      * Get a user's address
      */
-     
+
     public function getUserAddress($userId)
     {
         return $this->blockIo->get_user_address(['user_id' => $userId]);
     }
-    
+
     /**
      * Verifying the presicion of the provided amounts.
      * It is important to have the php7.0-bcmath package installed.
@@ -227,11 +227,11 @@ class LaraBlockIo
     public function withdraw($amounts, $toAddresses, $nonce = null)
     {
         $array = [
-            'amounts' => $amounts, 
+            'amounts' => $amounts,
             'to_addresses' => $toAddresses,
             'nonce' => $nonce
         ];
-        
+
         return $this->blockIo->withdraw(
                     $this->setAmountsPrecision($array)
                );
@@ -261,7 +261,7 @@ class LaraBlockIo
             'to_addresses' => $toAddresses,
             'nonce' => $nonce
         ];
-        
+
         return $this->blockIo->withdraw_from_addresses(
                     $this->setAmountsPrecision($array)
                );
@@ -300,13 +300,13 @@ class LaraBlockIo
             'to_labels' => $toLabels,
             'nonce' => $nonce
         ];
-        
+
         return $this->blockIo->withdraw_from_labels(
                     $this->setAmountsPrecision($array)
                );
 
     }
-    
+
     public function withdrawFromLabelsToAddresses(
         $amounts, $fromLabels, $toAddresses, $nonce = null)
     {
@@ -316,7 +316,7 @@ class LaraBlockIo
             'to_addresses' => $toAddresses,
             'nonce' => $nonce
         ];
-        
+
         return $this->blockIo->withdraw_from_labels(
                     $this->setAmountsPrecision($array)
                );
@@ -352,19 +352,19 @@ class LaraBlockIo
         $array = [
             'addresses' => $addresses
         ];
-        
+
         return $this->blockIo->archive_addresses($array);
     }
-    
+
     public function archiveAddressesByLabel($labels)
     {
         $array = [
             'labels' => $labels
         ];
-        
+
         return $this->blockIo->archive_addresses($array);
     }
-    
+
     /**
      * Unarchives upto 100 addresses in a single API call. Addresses can be
      * specified by their labels.
@@ -385,19 +385,19 @@ class LaraBlockIo
         $array = [
             'addresses' => $addresses
         ];
-        
+
         return $this->blockIo->unarchive_addresses($array);
     }
-    
+
     public function unarchiveAddressesByLabel($labels)
     {
         $array = [
             'labels' => $labels
         ];
-        
+
         return $this->blockIo->unarchive_addresses($array);
     }
-    
+
     /**
      * Returns all the archived addresses, their labels, and user ids on your
      * account.
@@ -450,13 +450,13 @@ class LaraBlockIo
     public function getTransactionsByAddresses(
         $type, $addresses, $beforeTx = null
     )
-    {   
+    {
         if(is_null($beforeTx))
         {
             $array = [
                 'type' => $type,
                 'addresses' => $addresses,
-            ];    
+            ];
         }
         else
         {
@@ -466,14 +466,14 @@ class LaraBlockIo
                 'before_tx' => $beforeTx,
             ];
         }
-        
+
         return $this->blockIo->get_transactions($array);
     }
-    
+
     public function getTransactionsByLabels(
         $type, $labels, $beforeTx = null
     )
-    {   
+    {
         if(is_null($beforeTx))
         {
             $array = [
@@ -489,14 +489,14 @@ class LaraBlockIo
                 'labels' => $labels
             ];
         }
-        
+
         return $this->blockIo->get_transactions($array);
     }
-    
+
     public function getTransactionsByUserIds(
         $type, $userIds, $beforeTx = null
     )
-    {   
+    {
         if(is_null($beforeTx))
         {
             $array = [
@@ -512,27 +512,27 @@ class LaraBlockIo
                 'user_ids' => $userIds
             ];
         }
-        
+
         return $this->blockIo->get_transactions($array);
     }
-    
+
     public function getReceivedTransactions($beforeTx = null)
     {
         if(is_null($beforeTx)) $array = ['type' => 'received'];
         else $array = ['type' => 'received', 'before_tx' => $beforeTx];
-        
+
         return $this->blockIo->get_transactions($array);
     }
-    
+
     public function getSentTransactions($beforeTx = null)
     {
         if(is_null($beforeTx)) $array = ['type' => 'sent'];
         else $array = ['type' => 'sent', 'before_tx' => $beforeTx];
-        
+
         return $this->blockIo->get_transactions($array);
     }
-    
-    
+
+
     /**
      * Returns the prices from the largest exchanges for Bitcoin, Dogecoin,
      * or Litecoin, specified by the API Key. Specifying the base
@@ -542,7 +542,7 @@ class LaraBlockIo
     public function getCurrentPrice($baseCurrency = null)
     {
         if(!is_null($baseCurrency)) $array = ['price_base' => $baseCurrency];
-        
+
         return $this->blockIo->get_current_price($array);
     }
 
@@ -556,13 +556,13 @@ class LaraBlockIo
      * array('addresses' => 'ADDRESS1,ADDRESS2,...')
      *
      * Not working properly.
-     * 
+     *
      */
 
     public function isGreenAddress($addresses)
     {
         $array = ['addresses' => $addresses];
-        
+
         return $this->blockIo->is_green_address($array);
     }
 
@@ -581,7 +581,7 @@ class LaraBlockIo
     public function isGreenTransaction($txIds)
     {
         $array = ['transaction_ids' => $txIds];
-        
+
         return $this->blockIo->is_green_transaction($array);
     }
 
@@ -599,9 +599,9 @@ class LaraBlockIo
         $txs = $this->blockIo->get_transactions(
                         array('addresses' => $toAddress, 'type' => 'received')
                    )->data->txs;
-        
+
         $txs = array_where($txs, function($value) use ($confidenceThreshold){
-                        if($value->confidence < $confidenceThreshold 
+                        if($value->confidence < $confidenceThreshold
                             && $value->from_green_address == true)
                         {
                             return $value;
@@ -620,12 +620,12 @@ class LaraBlockIo
     /**
      * Get all dTrust addresses
      */
-     
+
     public function getDTrustAddresses()
     {
         return $this->blockIo->get_my_dtrust_addresses();
     }
-     
+
     protected function createPassphrases($passphrases_array)
     {
         $passphrases = [];
@@ -688,37 +688,37 @@ class LaraBlockIo
     public function getDTrustInfoByLabel($label)
     {
         $array = ['label' => $label];
-        
+
         return $this->blockIo->get_dtrust_address_by_label($array);
     }
 
     public function multiSigWithdraw($label, $toAddress, $amount)
     {
         $array = [
-            'from_labels' => $label, 
-            'to_addresses' => $toAddress, 
+            'from_labels' => $label,
+            'to_addresses' => $toAddress,
             'amounts' => $amount
         ];
-        
+
         $response = $this->blockIo->withdraw_from_dtrust_address($array);
-        
+
         $reference_id = $response->data->reference_id;
-        
+
         return compact('response', 'reference_id');
     }
-    
+
     /**
      * Returns the pending withdrawal from a MultiSig address. Receives the
      * following parameter:
-     * 
-     * array('reference_id' => 'REFERENCEID') 
-     */ 
-    
+     *
+     * array('reference_id' => 'REFERENCEID')
+     */
+
     protected function getKey($passphrase)
     {
         return $this->blockIo->initKey()->fromPassphrase(strToHex($passphrase));
     }
-    
+
     protected function signDTrust($response)
     {
         $json_string = json_encode($response->data->details);
@@ -727,53 +727,53 @@ class LaraBlockIo
     	                            array('signature_data' => $json_string)
     	                       );
     }
-    
+
     protected function getSigCount($reference_id)
     {
         $array = array('reference_id' => $reference_id);
-        
+
         $response = $this->getMultiSigWithdraw($array)->data->details;
-        
+
         if($response->more_signatures_needed)
         {
             $count = 0;
-            
+
             foreach($response->inputs as $input)
             {
                 $count += $input->signatures_needed;
             }
-            
+
             return $count;
         }
         else return 0;
     }
-    
+
     protected function closeMultiSigTxs($reference_id)
     {
         return $this->blockIo->finalize_transaction(
                                     array('reference_id' => $reference_id)
                                );
     }
-    
+
     public function getMultiSigWithdraw($array)
     {
         return $this->blockIo->get_remaining_signers($array);
     }
-    
+
     public function signMultiSigWithdraw($reference_id, $passphrase)
     {
         $array = array('reference_id' => $reference_id);
-        
+
         $response = $this->getMultiSigWithdraw($array);
-                           
+
         $key = $this->getKey($passphrase);
-        
+
         $signature = &$key;
-                           
+
         foreach($response->data->details->inputs as &$input)
-        {   
+        {
             $dataToSign = $input->data_to_sign;
-            
+
             foreach($input->signers as &$signer)
             {
                 if($signer->signer_public_key == $signature->getPublicKey())
@@ -783,45 +783,45 @@ class LaraBlockIo
                 }
             }
         }
-        
+
         $this->signDTrust($response);
-        
+
         $reqSigs = $this->getSigCount($reference_id);
-        
+
         if($reqSigs == 0)
         {
             return $this->closeMultiSigTxs($reference_id);
         }
-        
+
         return $reqSigs;
     }
-    
+
     public function getSentDTrustTransactions($beforeTx = null)
     {
         if(is_null($beforeTx)) $array = ['type' => 'sent'];
         else $array = ['type' => 'sent', 'before_tx' => $beforeTx];
-        
+
         return $this->blockIo->get_dtrust_transactions($array);
     }
-    
+
     public function getReceivedDTrustTransactions($beforeTx = null)
     {
         if(is_null($beforeTx)) $array = ['type' => 'received'];
         else $array = ['type' => 'received', 'before_tx' => $beforeTx];
-        
+
         return $this->blockIo->get_dtrust_transactions($array);
     }
-    
-    public function getDtrustTransactionsByAddress(    
+
+    public function getDtrustTransactionsByAddress(
         $type, $addresses, $beforeTx = null
     )
-    {   
+    {
         if(is_null($beforeTx))
         {
             $array = [
                 'type' => $type,
                 'addresses' => $addresses,
-            ];    
+            ];
         }
         else
         {
@@ -831,10 +831,10 @@ class LaraBlockIo
                 'before_tx' => $beforeTx,
             ];
         }
-        
+
         return $this->blockIo->get_dtrust_transactions($array);
     }
-    
+
     public function getDtrustTransactionsByLabel(
         $type, $labels, $beforeTx = null)
     {
@@ -853,14 +853,14 @@ class LaraBlockIo
                 'labels' => $labels
             ];
         }
-        
+
         return $this->blockIo->get_dtrust_transactions($array);
     }
-    
+
     public function getDTrustTransactionsByUserIds(
         $type, $userIds, $beforeTx = null
     )
-    {   
+    {
         if(is_null($beforeTx))
         {
             $array = [
@@ -876,36 +876,36 @@ class LaraBlockIo
                 'user_ids' => $userIds
             ];
         }
-        
+
         return $this->blockIo->get_dtrust_transactions($array);
     }
-    
+
     public function getDTrustAddressBalance($addresses)
     {
         $array = ['addresses' => $addresses];
-        
+
         return $this->blockIo->get_dtrust_address_balance($array);
     }
-    
+
     public function archiveDTrustAddress($addresses)
     {
         $array = ['addresses' => $addresses];
-        
+
         return $this->blockIo->archive_dtrust_address($array);
     }
-    
+
     public function unarchiveDTrustAddress($addresses)
     {
         $array = ['addresses' => $addresses];
-        
+
         return $this->blockIo->unarchive_dtrust_address($array);
     }
-    
+
     public function getArchivedDTrustAddresses()
     {
         return $this->blockIo->get_my_archived_dtrust_addresses();
     }
-    
+
     public function getNetworkDTrustFeeEstimate(
         $amounts, $fromAddress, $toAddress)
     {
@@ -915,16 +915,16 @@ class LaraBlockIo
                         'to_addresses' => $toAddress
                     ]);
     }
-    
+
     public function sweepFromAddress($from_address, $to_address, $private_key)
     {
         return $this->blockIo->sweep_from_address(
-                                    array('from_address' => $from_address, 
-                                    'to_address' => $to_address, 
+                                    array('from_address' => $from_address,
+                                    'to_address' => $to_address,
                                     'private_key' => $private_key)
                                );
     }
-    
+
 }
 
 /**
