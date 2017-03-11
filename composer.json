@@ -15,5 +15,13 @@
     ],
     "require": {
         "block_io-php/block_io-php": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Blockavel\\LaraBlockIo\\": "src/"
+        }
     }
 }
