@@ -172,13 +172,14 @@ class LaraBlockIo
         unset($array['amounts']);
 
         $temp = array();
+        
         try
         {
             foreach($amounts as $amount)
             {
                 $temp[] = bcadd($amount, '0', 8);
             }
-
+    
             return array_merge(
                         ['amounts' => implode(',', array_values($temp))],
                         $array
@@ -188,7 +189,7 @@ class LaraBlockIo
         {
             $e->getMessage();
         }
-
+        
     }
 
     /**
