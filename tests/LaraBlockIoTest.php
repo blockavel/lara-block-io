@@ -40,7 +40,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetBalanceInfo()
     {
-        //$laraBlockIo = new LaraBlockIo;
 
         $res = LaraBlockIo::getBalanceInfo();
         $this->assertTrue(gettype($res) == 'object');
@@ -54,7 +53,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetNetwork()
     {
-        //$laraBlockIo = new LaraBlockIo;
 
         $res = LaraBlockIo::getNetwork();
 
