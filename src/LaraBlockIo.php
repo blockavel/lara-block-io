@@ -114,12 +114,12 @@ class LaraBlockIo
      * Ex: $array = array('addresses' => 'ADDRESS1,ADDRESS2,...')
      */
 
-    public function getAddressBalanceByAddress($addresses)
+    public function getAddressesBalanceByAddress($addresses)
     {
         return $this->blockIo->get_address_balance(['addresses' => $addresses]);
     }
 
-    public function getAddressBalanceByLabel($labels)
+    public function getAddressesBalanceByLabels($labels)
     {
         return $this->blockIo->get_address_balance(['label' => $labels]);
     }
@@ -146,9 +146,9 @@ class LaraBlockIo
      * Get a user's balance
      */
 
-    public function getUserBalance($userId)
+    public function getUsersBalance($userIds)
     {
-        return $this->blockIo->get_user_balance(['user_id' => $userId]);
+        return $this->blockIo->get_user_balance(['user_id' => $userIds]);
     }
 
     /**
@@ -176,16 +176,23 @@ class LaraBlockIo
         unset($array['amounts']);
 
         $temp = array();
-
-        foreach($amounts as $amount)
+        try
         {
-            $temp[] = bcadd($amount, '0', 8);
+            foreach($amounts as $amount)
+            {
+                $temp[] = bcadd($amount, '0', 8);
+            }
+    
+            return array_merge(
+                        ['amounts' => implode(',', array_values($temp))],
+                        $array
+                    );
         }
-
-        return array_merge(
-                    ['amounts' => implode(',', array_values($temp))],
-                    $array
-                );
+        catch(Exception $e)
+        {
+            $e->getMessage();
+        }
+        
     }
 
     /**
