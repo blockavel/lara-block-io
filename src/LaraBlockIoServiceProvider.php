@@ -17,7 +17,11 @@ class LaraBlockIoServiceProvider extends ServiceProvider
             __DIR__ . '/config/main.php' => config_path('larablockio.php'),
         ]);
 
-        require __DIR__ . '/../vendor/autoload.php';
+        $file = _DIR__ . '/../vendor/autoload.php';
+
+        if (file_exists($file)) {
+            require $file;
+        }
     }
 
     /**
