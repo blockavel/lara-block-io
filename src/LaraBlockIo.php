@@ -14,13 +14,9 @@ class LaraBlockIo
     public function __construct()
     {
         $this->blockIo = new \BlockIo(
-                '9d4e-75e9-71e3-eb8d', 'Gueraberta1', 2
-                /*getenv('BLOCKIO_API_KEY'),
-                getenv('BLOCKIO_PIN'),
-                getenv('BLOCKIO_VERSION')
                 config('larablockio.apiKey'),
                 config('larablockio.pin'),
-                config('larablockio.version')*/
+                config('larablockio.version')
             );
     }
 
@@ -176,6 +172,7 @@ class LaraBlockIo
         unset($array['amounts']);
 
         $temp = array();
+        
         try
         {
             foreach($amounts as $amount)
