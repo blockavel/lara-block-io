@@ -238,7 +238,7 @@
         
         public function testGetUserAddress()
         {
-            $laraBlockIo =  new LaraBlockIo;
+            $laraBlockIo = new LaraBlockIo;
             
             $user = $laraBlockIo->getUsers()->data->addresses[0]->user_id;
             
@@ -258,6 +258,49 @@
             
             $res = $laraBlockIo->getUserAddress($user);
         }
+        
+        public function cmp($a, $b)
+        {
+            return $a->available_balance < $b->available_balance;
+        }
+        
+        public function testGetNetworkFeeEstimate()
+        {
+            $laraBlockIo = new LaraBlockIo;
+            
+            $addresses = $laraBlockIo->getAddresses();
+
+            usort($addresses, array($this, "cmp"));
+            
+            $amount = $addresses[0]->available_balance * .5;
+            
+            if($amount > .002)
+            {
+                $address = $addresses[count($addresses) - 1];
+            
+                $res = $laraBlockIo->getNetworkFeeEstimate($amount, $address->address);
+                
+                $this->assertArrayHasKey('data', (array) $res);
+                $this->assertArrayHasKey('network', (array) $res->data);
+                $this->assertArrayHasKey('estimated_network_fee', (array) $res->data);
+            }
+            
+            $this->expectException(Exception::class);
+            
+            $address = $this->randomString();
+            
+            $res = $laraBlockIo->getNetworkFeeEstimate($amount, $address);
+            
+            $this->expectException(Exception::class);
+            
+            $address = $addresses[count($addresses)];
+            
+            $amount = 0;
+            
+            $res = $laraBlockIo->getNetworkFeeEstimate($amount, $address);
+            
+        }
+        
     }
 
 ?>
