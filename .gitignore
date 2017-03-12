@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 composer.lock
-phpunit.xml
-vendor
-=======
 vendor/
 node_modules/
 
@@ -18,4 +14,3 @@ bootstrap/cache/
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
->>>>>>> 809ed3247fbef4b6a71bc2d10fc4b3de2a367580
