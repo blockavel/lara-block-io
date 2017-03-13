@@ -257,7 +257,7 @@ class LaraBlockIo
      *     )
      */
 
-    public function withdrawFromAddresses(
+    public function withdrawFromAddressesToAddresses(
         $amounts, $fromAddresses, $toAddresses, $nonce = null
     )
     {
@@ -362,7 +362,7 @@ class LaraBlockIo
         return $this->blockIo->archive_addresses($array);
     }
 
-    public function archiveAddressesByLabel($labels)
+    public function archiveAddressesByLabels($labels)
     {
         $array = [
             'labels' => $labels
@@ -395,7 +395,7 @@ class LaraBlockIo
         return $this->blockIo->unarchive_addresses($array);
     }
 
-    public function unarchiveAddressesByLabel($labels)
+    public function unarchiveAddressesByLabels($labels)
     {
         $array = [
             'labels' => $labels
