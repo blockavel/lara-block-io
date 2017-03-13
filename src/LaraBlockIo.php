@@ -4,13 +4,19 @@ namespace Blockavel\LaraBlockIo;
 
 class LaraBlockIo
 {
+
+    /**
+     * The BlockIo instance
+     *
+     * @var BlockIo
+     */
     protected $blockIo;
 
     /**
      * Instantiating the BlockIo Class passing the API key, the pin,
-     * and the API version.
+     * and the API version. Define your environment variables in the
+     * Laravel in the respective .env file
      */
-
     public function __construct()
     {
         $this->blockIo = new \BlockIo(
@@ -22,8 +28,9 @@ class LaraBlockIo
 
     /**
      * BlockIo getter method, returns a BlockIo object.
+     *
+     * @return BlockIo
      */
-
     public function getBlockIo()
     {
         return $this->blockIo;
@@ -32,33 +39,50 @@ class LaraBlockIo
     /**
      * Get the balance information associated with a Bitcoin Dogecoin,
      * or Litecoin account.
+     *
+     * @return object Contains balance information
      */
-
     public function getBalanceInfo()
     {
         return $this->blockIo->get_balance();
     }
 
+    /**
+     * Get the Network associated with your API KEY
+     *
+     * @return string Contains network information
+     */
     public function getNetwork()
     {
         return $this->getBalanceInfo()->data->network;
     }
 
+    /**
+     * Get the total balance of your entire network
+     *
+     * @return string Contains the balance value
+     */
     public function getAvailableBalance()
     {
         return $this->getBalanceInfo()->data->available_balance;
     }
 
+    /**
+     * Get the the balance that's pending confirmation in your network
+     *
+     * @return string Contains the pending balance
+     */
     public function getPendingReceivedBalance()
     {
         return $this->getBalanceInfo()->data->pending_received_balance;
     }
 
     /**
-     * Create new address. Receives an associative array with 'label'
-     * as key and the string values for the label(s).
+     * Create new address. Receives a string and uses the value
+     * as label to create a new wallet
      *
-     * Ex: $array = array('label' => 'USER1')
+     * @param string $label Containing the label of the wallet
+     * @return object Contains the status of wallet creation
      */
 
     public function createAddress($label)
@@ -71,50 +95,70 @@ class LaraBlockIo
      * balances on an account. Do not use this if you plan on
      * having more than 2,500 addresses on your account.
      * Use get_address_balance (below) instead.
+     *
+     * @return object An object of objects containing all the addresses
      */
-
     public function getAddressesInfo()
     {
         return $this->blockIo->get_my_addresses();
     }
 
+    /**
+     * Get all the (unarchived) addresses, their labels and user ids on
+     * an account.
+     *
+     * @return object An object of objects containing all the addresses
+     */
     public function getAddressesInfoWithoutBalances()
     {
         return $this->blockIo->get_my_addresses_without_balances();
     }
 
     /**
-     * Get just the (unarchived) addresses associated with an account.
+     * Get just the (unarchived) addresses associated with an account,
+     * their labels, user ids, available and pending balances
+     *
+     * @return array Contains objects of addresses
      */
-
     public function getAddresses()
     {
         return $this->getAddressesInfo()->data->addresses;
     }
 
+    /**
+     * Get just the (unarchived) addresses associated with an account,
+     * their labels and user ids
+     *
+     * @return array Contains objects of addresses
+     */
     public function getAddressesWithoutBalances()
     {
         return $this->getAddressesInfoWithoutBalances()->data->addresses;
     }
 
     /**
-     * Get address(es) balance by specified address(es) or label(s). This
+     * Get address(es) balance by specified address(es). This
      * method can be used to query balances for external (non-account)
      * addresses. If an external address' balance is returned, its
      * user_id and label fields will be null.
      *
-     * Ex: $array = array('label' => 'USER1,USER2,...')
-     *
-     * OR
-     *
-     * Ex: $array = array('addresses' => 'ADDRESS1,ADDRESS2,...')
+     * @param string $addresses Containing comma separated addresses
+     * @return object Contains information associate with each address
      */
-
     public function getAddressesBalanceByAddress($addresses)
     {
         return $this->blockIo->get_address_balance(['addresses' => $addresses]);
     }
 
+    /**
+     * Get address(es) balance by specified label(s). This
+     * method can be used to query balances for external (non-account)
+     * addresses. If an external address' balance is returned, its
+     * user_id and label fields will be null.
+     *
+     * @param string $labels Containing comma separated labels
+     * @return object Contains information associate with each address
+     */
     public function getAddressesBalanceByLabels($labels)
     {
         return $this->blockIo->get_address_balance(['label' => $labels]);
@@ -122,26 +166,31 @@ class LaraBlockIo
 
     /**
      * Get address by label.
+     *
+     * @param string $label Containing the wallet's label
+     * @return object Contains information associated with the wallet
      */
-
     public function getAddressByLabel($label)
     {
         return $this->blockIo->get_address_by_label(['label' => $label]);
     }
 
     /**
-     * Get all users.
+     * Get all users in your network
+     *
+     * @return object Contains all the users and associated information
      */
-
     public function getUsers()
     {
         return $this->blockIo->get_users();
     }
 
     /**
-     * Get a user's balance
+     * Get user(s)' balance
+     *
+     * @param string $userIds Containing comma separated user ids
+     * @return object Contains information about the respective users
      */
-
     public function getUsersBalance($userIds)
     {
         return $this->blockIo->get_user_balance(['user_id' => $userIds]);
@@ -149,8 +198,10 @@ class LaraBlockIo
 
     /**
      * Get a user's address
+     *
+     * @param string $userId Containing a single user id
+     * @return object Contains user's address and balance information
      */
-
     public function getUserAddress($userId)
     {
         return $this->blockIo->get_user_address(['user_id' => $userId]);
@@ -158,28 +209,28 @@ class LaraBlockIo
 
     /**
      * Verifying the presicion of the provided amounts.
-     * It is important to have the php7.0-bcmath package installed.
+     * You need to have the php7.0-bcmath package installed.
      *
      * To install it in ubuntu run:
      *      sudo apt-get updatesudo
      *      apt-get install php7.0-bcmath
+     *
+     * @param array $array
+     * @return string|Exception
      */
-
     protected function setAmountsPrecision($array)
     {
         $amounts = explode(',', str_replace(' ', '', $array['amounts']));
-
         unset($array['amounts']);
-
         $temp = array();
-        
+
         try
         {
             foreach($amounts as $amount)
             {
                 $temp[] = bcadd($amount, '0', 8);
             }
-    
+
             return array_merge(
                         ['amounts' => implode(',', array_values($temp))],
                         $array
@@ -189,19 +240,16 @@ class LaraBlockIo
         {
             $e->getMessage();
         }
-        
     }
 
     /**
      * Get network fee estimate for transacting (withdrawing, sending).
-     * Receives an associative array of addresses and amounts.
+     * Note: Amount should be below available balance
      *
-     * Ex $array = array(
-     *                  'amounts' => 'AMOUNT1,AMOUNT2,...',
-     *                  'to_addresses' => 'ADDRESS1,ADDRESS2,...'
-     *             )
+     * @param $amounts string Containing comma separated amount values
+     * @param $addresses string Containing comma separated address values
+     * @return object Contains estimated network fee for the amount
      */
-
     public function getNetworkFeeEstimate($amounts, $addresses)
     {
         return $this->blockIo->get_network_fee_estimate(

@@ -40,7 +40,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetBalanceInfo()
     {
-        //$laraBlockIo = new LaraBlockIo;
 
         $res = LaraBlockIo::getBalanceInfo();
         $this->assertTrue(gettype($res) == 'object');
@@ -54,7 +53,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetNetwork()
     {
-        //$laraBlockIo = new LaraBlockIo;
 
         $res = LaraBlockIo::getNetwork();
 
@@ -278,30 +276,30 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
     
     public function testGetNetworkFeeEstimate()
     {
-        
+
         $addresses = LaraBlockIo::getAddresses();
 
         usort($addresses, array($this, "cmp"));
         
         $amount = $addresses[0]->available_balance * 0.5;
-        
-        if($amount > 0.001)
+
+        if($amount > .001)
         {
             $address = $addresses[count($addresses) - 1];
-        
+
             $res = LaraBlockIo::getNetworkFeeEstimate($amount, $address->address);
-            
+
             $this->assertArrayHasKey('data', (array) $res);
             $this->assertArrayHasKey('network', (array) $res->data);
             $this->assertArrayHasKey('estimated_network_fee', (array) $res->data);
         }
-        
+
         $this->expectException(Exception::class);
-        
+
         $address = $this->randomString();
-        
+
         $res = LaraBlockIo::getNetworkFeeEstimate($amount, $address);
-        
+
         $this->expectException(Exception::class);
         
         $address = $addresses[count($addresses)]->address;
@@ -309,7 +307,7 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $amount = 0;
 
         $res = LaraBlockIo::getNetworkFeeEstimate($amount, $address);
-        
+
     }
     
     public function testWithdraw()
@@ -495,48 +493,56 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
     
     public function testArchiveAndUnarchiveAddressesByAddress()
     {
-        $address = LaraBlockIo::getAddresses()[0]->address;
+        $address = LaraBlockIo::getAddresses()[count(LaraBlockIo::getAddresses()) - 1]->address;
+        
+        sleep(1);
         
         $res = LaraBlockIo::archiveAddressesByAddress($address);
         
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('addresses', (array) $res->data);
-        $this->assertArrayHasKey('address', (array) $res->data->addresses);
-        $this->assertArrayHasKey('archived', (array) $res->data->addresses);
-        $this->assertTrue($res->data->addresses->archived == true);
+        $this->assertArrayHasKey('address', (array) ($res->data->addresses[0]));
+        $this->assertArrayHasKey('archived', (array) ($res->data->addresses[0]));
+        $this->assertTrue($res->data->addresses[0]->archived == true);
+        
+        sleep(1);
         
         $res = LaraBlockIo::unarchiveAddressesByAddress($address);
         
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('addresses', (array) $res->data);
-        $this->assertArrayHasKey('address', (array) $res->data->addresses);
-        $this->assertArrayHasKey('archived', (array) $res->data->addresses);
-        $this->assertTrue($res->data->addresses->archived == false);
+        $this->assertArrayHasKey('address', (array) ($res->data->addresses[0]));
+        $this->assertArrayHasKey('archived', (array) ($res->data->addresses[0]));
+        $this->assertTrue($res->data->addresses[0]->archived == false);
     }
     
     public function testArchiveAndUnarchiveAddressesByLabels()
     {
         $label = LaraBlockIo::getAddresses()[count(LaraBlockIo::getAddresses()) - 1]->label;
         
+        sleep(1);
+        
         $res = LaraBlockIo::archiveAddressesByLabels($label);
         
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('addresses', (array) $res->data);
-        $this->assertArrayHasKey('address', (array) $res->data->addresses);
-        $this->assertArrayHasKey('archived', (array) $res->data->addresses);
-        $this->assertTrue($res->data->addresses->archived == true);
+        $this->assertArrayHasKey('address', (array) ($res->data->addresses[0]));
+        $this->assertArrayHasKey('archived', (array) ($res->data->addresses[0]));
+        $this->assertTrue($res->data->addresses[0]->archived == true);
+        
+        sleep(1);
         
         $res = LaraBlockIo::unarchiveAddressesByLabels($label);
         
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('addresses', (array) $res->data);
-        $this->assertArrayHasKey('address', (array) $res->data->addresses);
-        $this->assertArrayHasKey('archived', (array) $res->data->addresses);
-        $this->assertTrue($res->data->addresses->archived == false);
+        $this->assertArrayHasKey('address', (array) ($res->data->addresses[0]));
+        $this->assertArrayHasKey('archived', (array) ($res->data->addresses[0]));
+        $this->assertTrue($res->data->addresses[0]->archived == false);
     }
     
 }
