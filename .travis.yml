@@ -35,7 +35,7 @@ install:
   #  Copy our project here
   - sudo mv $TRAVIS_BUILD_DIR $HOME/laravel-sandbox/packages/blockavel/lara-block-io
   # Change to package directory
-  - cd packages/blockavel/lara-block-io
+  - cd blockavel/lara-block-io
   # Install dependencies
   - composer install
   # Expose LaraBlockIo to Laravel
