@@ -16,7 +16,7 @@ before_install:
 
 install:
   # Install PHP extensions for lara-block-io
-  - sudo apt-get install -y --force-yes php7-mcrypt php7-gmp php7-curl
+  - sudo apt-get install -y --force-yes php7.0-mcrypt php7.0-gmp php7.0-curl php7.0-bcmath
   # Change to a home directory
   - cd $HOME
   # create a new laravel project in the subfolder laravel-sandbox
