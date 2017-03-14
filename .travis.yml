@@ -41,7 +41,7 @@ install:
   # Expose LaraBlockIo to Laravel
   - sudo cp ./tests/config/app.php $HOME/laravel-sandbox/config/app.php
   # Copy the config file
-  - cp config/main.php $HOME/laravel-sandbox/config/larablockio.php
+  - cp src/config/main.php $HOME/laravel-sandbox/config/larablockio.php
 
 script:
   # run the script calling unit tests and so on
