@@ -43,9 +43,7 @@ install:
   # Copy the config file
   - cp src/config/main.php $HOME/laravel-sandbox/config/larablockio.php
 
-script:
-  # run the script calling unit tests and so on
-  - script: "vendor/bin/phpunit"
+script: vendor/bin/phpunit
 
 after_failure:
   - cat /var/log/travis-queue.log
