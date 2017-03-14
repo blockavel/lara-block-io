@@ -23,7 +23,7 @@ install:
   # Install latest curl PHP extension for lara-block-io
   - sudo apt-get install -y --force-yes php7.0-curl
   # Enable extensions
-  - sudo service php7.0-fpm restart
+  - phpenv config-add /etc/php/7.0/mods-available/curl.ini
   - php -r "print_r(curl_version()); "
   - curl -V
   # Change to a home directory
