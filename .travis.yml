@@ -29,8 +29,11 @@ install:
   - cd laravel-sandbox
   # Make a packages directory
   - mkdir packages
+  # Make our vendor directory
+  - cd packages
+  - mkdir blockavel
   #  Copy our project here
-  - sudo mv $TRAVIS_BUILD_DIR/blockavel $HOME/laravel-sandbox/packages/blockavel
+  - sudo mv $TRAVIS_BUILD_DIR $HOME/laravel-sandbox/packages/blockavel/lara-block-io
   # Change to package directory
   - cd packages/blockavel/lara-block-io
   # Install dependencies
