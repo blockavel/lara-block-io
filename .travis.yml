@@ -13,6 +13,8 @@ install:
   - sudo make install
   - /usr/local/bin/openssl version
   - ldd /usr/local/bin/openssl
+  - export CFLAGS="-I/usr/local/include/ -L/usr/local/lib -Wl,-rpath,/usr/local/lib -lssl -lcrypto"
+  - export CXXFLAGS="-I/usr/local/include/ -L/usr/local/lib -Wl,-rpath,/usr/local/lib -lssl -lcrypto"
   - wget https://curl.haxx.se/download/curl-7.51.0.tar.gz
   - tar xzf curl-7.51.0.tar.gz
   - cd curl-7.51.0
