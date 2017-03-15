@@ -9,8 +9,8 @@ install:
   - tar xzf openssl-1.1.0b.tar.gz
   - cd openssl-1.1.0b
   - ./Configure linux-x86_64 shared no-ssl2 no-ssl3 no-comp enable-ec_nistp_64_gcc_128 -Wl,-rpath,/usr/local/lib
-  - make -j 4
-  - sudo make install
+  - make -s -j 4
+  - sudo make -s install
   - /usr/local/bin/openssl version
   - ldd /usr/local/bin/openssl
   - export CFLAGS="-I/usr/local/include/ -L/usr/local/lib -Wl,-rpath,/usr/local/lib -lssl -lcrypto"
@@ -19,12 +19,11 @@ install:
   - tar xzf curl-7.51.0.tar.gz
   - cd curl-7.51.0
   - ./configure --with-ssl=/usr/local
-  - make -j 4
-  - sudo make install
+  - make -s -j 4
+  - sudo make -s install
   - which curl
   - ldd /usr/local/bin/curl
   - /usr/local/bin/curl -V
-  - php -r "print_r(curl_version()); "
   - curl -V
   - openssl version -v
   - sudo apt-get install -y --force-yes software-properties-common
