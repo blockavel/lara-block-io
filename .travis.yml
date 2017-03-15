@@ -7,10 +7,6 @@ php:
   - 7.0
   - 7.1
 
-branches:
-  only:
-  - dev
-
 install:
   # updates composer on travis
   - travis_retry composer self-update
