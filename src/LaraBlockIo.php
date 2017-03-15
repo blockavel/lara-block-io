@@ -320,7 +320,7 @@ class LaraBlockIo
                     $this->setAmountsPrecision($array)
                );
     }
-
+    
     /**
      * Withdraws AMOUNT coins from upto 2500 labels at a time, and deposits
      * it to upto 2500 destination addresses, or labels.
@@ -590,7 +590,7 @@ class LaraBlockIo
     /**
      * Returns the prices from the largest exchanges for Bitcoin, Dogecoin,
      * or Litecoin, specified by the API Key. Specifying the base
-     * currency is optional.
+     * currency is optional. It does not work with testnets.
      */
 
     public function getCurrentPrice($baseCurrency = null)
@@ -598,26 +598,6 @@ class LaraBlockIo
         if(!is_null($baseCurrency)) $array = ['price_base' => $baseCurrency];
 
         return $this->blockIo->get_current_price($array);
-    }
-
-    /**
-     * Returns an array of Block.io Green Addresses. Funds sent from Green
-     * Addresses are guaranteed by Block.io, and can be used immediately
-     * on receipt with zero network confirmations.
-     *
-     * Receives the following array
-     *
-     * array('addresses' => 'ADDRESS1,ADDRESS2,...')
-     *
-     * Not working properly.
-     *
-     */
-
-    public function isGreenAddress($addresses)
-    {
-        $array = ['addresses' => $addresses];
-
-        return $this->blockIo->is_green_address($array);
     }
 
     /**
@@ -655,22 +635,23 @@ class LaraBlockIo
                    )->data->txs;
 
         $txs = array_where($txs, function($value) use ($confidenceThreshold){
-                        if($value->confidence < $confidenceThreshold
-                            && $value->from_green_address == true)
-                        {
-                            return $value;
-                        }
-                        elseif($value->confidence < $confidenceThreshold
-                            || ($value->from_green_address == false
-                            && $value->confirmations < 3))
-                        {
-                            return $value;
-                        }
+                    if($value->confidence < $confidenceThreshold
+                        && $value->from_green_address == true)
+                    {
+                        return $value;
+                    }
+                    elseif($value->confidence < $confidenceThreshold
+                        || ($value->from_green_address == false
+                        && $value->confirmations < 3))
+                    {
+                        return $value;
+                    }
                 });
 
         return $txs;
 
     }
+    
     /**
      * Get all dTrust addresses
      */
@@ -711,8 +692,8 @@ class LaraBlockIo
     public function createMultiSigAddress(
                         $label,
                         $reqSigs,
-                        $s1 = null,
-                        $s2 = null,
+                        $s1,
+                        $s2,
                         $s3 = null,
                         $s4 = null
                     )
@@ -784,9 +765,7 @@ class LaraBlockIo
 
     protected function getSigCount($reference_id)
     {
-        $array = array('reference_id' => $reference_id);
-
-        $response = $this->getMultiSigWithdraw($array)->data->details;
+        $response = $this->getMultiSigWithdraw($reference_id)->data->details;
 
         if($response->more_signatures_needed)
         {
@@ -809,16 +788,17 @@ class LaraBlockIo
                                );
     }
 
-    public function getMultiSigWithdraw($array)
+    public function getMultiSigWithdraw($reference_id)
     {
-        return $this->blockIo->get_remaining_signers($array);
+        
+        return $this->blockIo->get_remaining_signers(
+                                    array('reference_id' => $reference_id)
+                               );
     }
 
     public function signMultiSigWithdraw($reference_id, $passphrase)
     {
-        $array = array('reference_id' => $reference_id);
-
-        $response = $this->getMultiSigWithdraw($array);
+        $response = $this->getMultiSigWithdraw($reference_id);
 
         $key = $this->getKey($passphrase);
 
@@ -866,7 +846,7 @@ class LaraBlockIo
         return $this->blockIo->get_dtrust_transactions($array);
     }
 
-    public function getDtrustTransactionsByAddress(
+    public function getDtrustTransactionsByAddresses(
         $type, $addresses, $beforeTx = null
     )
     {
@@ -889,7 +869,7 @@ class LaraBlockIo
         return $this->blockIo->get_dtrust_transactions($array);
     }
 
-    public function getDtrustTransactionsByLabel(
+    public function getDtrustTransactionsByLabels(
         $type, $labels, $beforeTx = null)
     {
         if(is_null($beforeTx))
@@ -981,18 +961,3 @@ class LaraBlockIo
 
 }
 
-/**
-   BlockIos List of Available Methods
-   BlockIo.PASSTHROUGH_METHODS = [
-      'get_address_received',
-      'create_user', '',
-      'get_user_received',
-      'sign_and_finalize_withdrawal',
-    ];
-
-    // withdrawal methods that need local signing
-    BlockIo.WITHDRAWAL_METHODS = [
-      'withdraw_from_users',
-    ];
-
-*/
