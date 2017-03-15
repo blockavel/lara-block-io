@@ -11,7 +11,7 @@ install:
   # Update apt-get
   - sudo apt-get update
   # Install latest curl PHP extension for lara-block-io
-  - sudo apt-get install -y --force-yes php7.0 php7.0-common php-pear php7.0-gmp php7.0-mcrypt php-7.0-bcmath php7.0-curl php7.0-cli php7.0-fpm php7.0-gd php7.0-json php7.0-mysql php7.0-readline php7.0-xdebug hp7.0-intl php7.0-imap php7.0-mbstring php7.0-ldap php7.0-ps php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-openssl php7.0-pdo php7.0-tokenizer php7.0-xml
+  - sudo apt-get install -y --force-yes php7.0 php7.0-common php-pear php7.0-gmp php7.0-mcrypt php7.0-bcmath php7.0-curl php7.0-cli php7.0-fpm php7.0-gd php7.0-json php7.0-mysql php7.0-readline php7.0-xdebug php7.0-intl php7.0-imap php7.0-mbstring php7.0-ldap php7.0-ps php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-pdo php7.0-tokenizer php7.0-xml
   # Check curl version
   - php -r "print_r(curl_version()); "
   - curl -V
