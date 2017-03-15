@@ -3,28 +3,28 @@ branches:
   - dev
 
 install:
-  - curl https://www.openssl.org/source/openssl-1.0.2g.tar.gz | tar xz && cd openssl-1.0.2g && sudo ./config && sudo make && sudo make install
-  - sudo ln -sf /usr/local/ssl/bin/openssl 'which openssl'
-  # Install any build dependencies needed for curl
-  - sudo apt-get build-dep curl
-  # Get latest (as of Feb 25, 2016) libcurl
-  - mkdir ~/curl
-  - cd ~/curl
-  - wget http://curl.haxx.se/download/curl-7.50.2.tar.bz2
-  - tar -xvjf curl-7.50.2.tar.bz2
-  - cd curl-7.50.2
-
-  # The usual steps for building an app from source
-  # ./configure
-  # ./make
-  # sudo make install
-  - ./configure
-  - make
+  # Change to a home directory
+  - cd $HOME
+  - wget https://www.openssl.org/source/openssl-1.1.0b.tar.gz
+  - tar xzf openssl-1.1.0b.tar.gz
+  - cd openssl-1.1.0b
+  - ./Configure linux-x86_64 shared no-ssl2 no-ssl3 no-comp enable-ec_nistp_64_gcc_128 -Wl,-rpath,/usr/local/lib
+  - make -j 4
   - sudo make install
-
-  # Resolve any issues of C-level lib
-  # location caches ("shared library cache")
-  - sudo ldconfig
+  - /usr/local/bin/openssl version
+  - ldd /usr/local/bin/openssl
+  - wget https://curl.haxx.se/download/curl-7.51.0.tar.gz
+  - tar xzf curl-7.51.0.tar.gz
+  - cd curl-7.51.0
+  - ./configure --with-ssl=/usr/local
+  - make -j 4
+  - sudo make install
+  - which curl
+  - ldd /usr/local/bin/curl
+  - /usr/local/bin/curl -V
+  - php -r "print_r(curl_version()); "
+  - curl -V
+  - openssl version -v
   - sudo apt-get install -y --force-yes software-properties-common
   - sudo apt-get install python-software-properties
   # PPA for PHP 7.0 and extensions
@@ -35,9 +35,6 @@ install:
   # Install latest curl PHP extension for lara-block-io
   - sudo apt-get install -y --force-yes php7.0 php7.0-common php-pear php7.0-gmp php7.0-mcrypt php7.0-bcmath php7.0-curl php7.0-cli php7.0-fpm php7.0-gd php7.0-json php7.0-mysql php7.0-readline php7.0-xdebug php7.0-intl php7.0-imap php7.0-mbstring php7.0-ldap php7.0-ps php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-pdo php7.0-tokenizer php7.0-xml
   # Check curl version
-  - php -r "print_r(curl_version()); "
-  - curl -V
-  - openssl version -v
   - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
   - php -r "if (hash_file('SHA384', 'composer-setup.php') === '669656bab3166a7aff8a7506b8cb2d1c292f042046c5a994c43155c0be6190fa0355160742ab2e1c88d40d5be660b410') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
   - php composer-setup.php
@@ -47,8 +44,6 @@ install:
   - travis_retry composer self-update
   # clear composer cache, might speed up finding new tags
   - travis_retry composer clear-cache
-  # Change to a home directory
-  - cd $HOME
   # create a new laravel project in the subfolder laravel-sandbox
   - composer create-project laravel/laravel laravel-sandbox 5.4.*
   # change to laravel root
