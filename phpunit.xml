@@ -16,8 +16,8 @@
         </testsuite>
     </testsuites>
     <php>
-        <env name="BLOCKIO_API_KEY" value="9d4e-75e9-71e3-eb8d"/>
-        <env name="BLOCKIO_PIN" value="Gueraberta1"/>
+        <env name="BLOCKIO_API_KEY" value="a976-4ceb-196c-526d"/>
+        <env name="BLOCKIO_PIN" value="FUnderwood20237457"/>
         <env name="BLOCKIO_VERSION" value="2"/>
     </php>
 </phpunit>

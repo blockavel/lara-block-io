@@ -1,0 +1,39 @@
+language: php
+
+dist: trusty
+sudo: required
+
+php:
+  - 7.0
+
+install:
+  # updates composer on travis
+  - travis_retry composer self-update
+  # clear composer cache, might speed up finding new tags
+  - travis_retry composer clear-cache
+  # Change to main directory
+  - cd $HOME
+  # create a new laravel project in the subfolder laravel-sandbox
+  - composer create-project laravel/laravel laravel-sandbox 5.4.*
+  # change to laravel root
+  - cd laravel-sandbox
+  # Make a packages directory
+  - mkdir packages
+  # Make our vendor directory
+  - cd packages
+  - mkdir blockavel
+  #  Copy our project here
+  - sudo mv $TRAVIS_BUILD_DIR $HOME/laravel-sandbox/packages/blockavel/lara-block-io
+  # Change to package directory
+  - cd blockavel/lara-block-io
+  # Install dependencies
+  - composer install
+  # Expose LaraBlockIo to Laravel
+  - sudo cp ./tests/config/app.php $HOME/laravel-sandbox/config/app.php
+  # Copy the config file
+  - cp src/config/main.php $HOME/laravel-sandbox/config/larablockio.php
+
+script: vendor/bin/phpunit
+
+after_failure:
+  - cat /var/log/travis-queue.log
