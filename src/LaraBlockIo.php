@@ -145,6 +145,7 @@ class LaraBlockIo
      * @param string $addresses Containing comma separated addresses
      * @return object Contains information associate with each address
      */
+     
     public function getAddressesBalanceByAddress($addresses)
     {
         return $this->blockIo->get_address_balance(['addresses' => $addresses]);
@@ -916,9 +917,9 @@ class LaraBlockIo
 
     public function getDTrustAddressBalance($addresses)
     {
-        $array = ['addresses' => $addresses];
-
-        return $this->blockIo->get_dtrust_address_balance($array);
+        return $this->blockIo->get_dtrust_address_balance([
+                    'addresses' => $addresses
+               ]);
     }
 
     public function archiveDTrustAddress($addresses)
