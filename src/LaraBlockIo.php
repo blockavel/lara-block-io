@@ -10,6 +10,7 @@ class LaraBlockIo
      *
      * @var BlockIo
      */
+     
     protected $blockIo;
 
     /**
@@ -17,6 +18,7 @@ class LaraBlockIo
      * and the API version. Define your environment variables in the
      * Laravel in the respective .env file
      */
+     
     public function __construct()
     {
         $this->blockIo = new \BlockIo(
@@ -31,6 +33,7 @@ class LaraBlockIo
      *
      * @return BlockIo
      */
+     
     public function getBlockIo()
     {
         return $this->blockIo;
@@ -42,6 +45,7 @@ class LaraBlockIo
      *
      * @return object Contains balance information
      */
+     
     public function getBalanceInfo()
     {
         return $this->blockIo->get_balance();
@@ -52,10 +56,11 @@ class LaraBlockIo
      *
      * @return string Contains network information
      */
-    public function getNetwork()
-    {
-        return $this->getBalanceInfo()->data->network;
-    }
+     
+     public function getNetwork()
+     {
+         return $this->getBalanceInfo()->data->network;
+     }
 
     /**
      * Get the total balance of your entire network
@@ -266,17 +271,14 @@ class LaraBlockIo
      * 2500 destination addresses. If you have more than 2500 unarchived
      * addresses on your account, you cannot use this method for
      * withdrawal. Please use the more granular
-     * withdraw_from_addresses, and
-     * withdraw_from_labels
+     * withdrawFromAddressesToAddresses, or
+     * withdrawFromLabelsToLabels
      * methods instead.
      *
-     * Receives an associative array of amounts and addresses.
-     *
-     * $array = array(
-     *              'amounts' => 'AMOUNT1,AMOUNT2,...',
-     *              'to_addresses' => 'ADDRESS1,ADDRESS2,...',
-     *              'nonce' => 'VALUE1,VALUE2,...' (optional)
-     *          )
+     * @param $amounts string Containing comma separated amount values
+     * @param $toAddresses string Containing comma separated address values
+     * @param $nonce string Containing comma separated nonce values
+     * @return object Contains withdraw details
      */
 
     public function withdraw($amounts, $toAddresses, $nonce = null)
@@ -293,17 +295,11 @@ class LaraBlockIo
     }
 
     /**
-     * Withdraws AMOUNT coins from upto 2500 addresses at a time, and deposits
-     * it to up to 2500 destination addresses.
-     *
-     * Receives an associative array of amounts, from_addresses, & to_addresses
-     *
-     * Ex: array(
-     *          'amounts' => 'AMOUNT1,AMOUNT2,...',
-     *          'from_addresses' => 'ADDRESS1,ADDRESS2,...',
-     *          'to_addresses' => 'ADDRESS1,ADDRESS2,...',
-     *          'nonce' => 'VALUE1,VALUE2,...' (optional)
-     *     )
+     * @param $amounts string Containing comma separated amount values
+     * @param $fromAddresses string Containing comma separated address values
+     * @param $toAddresses string Containing comma separated address values
+     * @param $nonce string Containing comma separated nonce values
+     * @return object Contains withdraw details
      */
 
     public function withdrawFromAddressesToAddresses(
@@ -323,27 +319,11 @@ class LaraBlockIo
     }
     
     /**
-     * Withdraws AMOUNT coins from upto 2500 labels at a time, and deposits
-     * it to upto 2500 destination addresses, or labels.
-     *
-     * Receives an associative array of amounts, from_labels,
-     * & to_addresses or to_labels
-     *
-     * Ex: array(
-     *          'amounts' => 'AMOUNT1,AMOUNT2,...',
-     *          'from_labels' => 'LABEL1,LABEL2,...',
-     *          'to_addresses' => 'ADDRESS1,ADDRESS2,...',
-     *          'nonce' => 'VALUE1,VALUE2,...' (optional)
-     *     )
-     *
-     * OR
-     *
-     * Ex: array(
-     *          'amounts' => 'AMOUNT1,AMOUNT2,...',
-     *          'from_labels' => 'LABEL1,LABEL2,...',
-     *          'to_labels' => 'LABEL1,LABEL2,...',
-     *          'nonce' => 'VALUE1,VALUE2,...' (optional)
-     *     )
+     * @param $amounts string Containing comma separated amount values
+     * @param $fromLabels string Containing comma separated labels values
+     * @param $toLabels string Containing comma separated labels values
+     * @param $nonce string Containing comma separated nonce values
+     * @return object Contains withdraw details
      */
 
     public function withdrawFromLabelsToLabels(
@@ -361,7 +341,15 @@ class LaraBlockIo
                );
 
     }
-
+    
+    /**
+     * @param $amounts string Containing comma separated amount values
+     * @param $fromLabels string Containing comma separated labels values
+     * @param $toAddresses string Containing comma separated addresses values
+     * @param $nonce string Containing comma separated nonce values
+     * @return object Contains withdraw details
+     */
+    
     public function withdrawFromLabelsToAddresses(
         $amounts, $fromLabels, $toAddresses, $nonce = null)
     {
@@ -377,6 +365,7 @@ class LaraBlockIo
                );
 
     }
+    
     /**
      * Archiving of addresses help you control account bloat due to a large
      * number of addresses. When an address is archived, it is:
@@ -391,15 +380,8 @@ class LaraBlockIo
      * Archives upto 100 addresses in a single API call. Addresses can be
      * specified by their labels.
      *
-     * Receives an array of associative array of adresses or labels
-     *
-     * Ex:
-     *
-     * $array = array('addresses' => 'ADDRESS1,ADDRESS2,...')
-     *
-     * OR
-     *
-     * $array = array('labels' => 'LABEL1,LABEL2,...')
+     * @param $addresses string Containing comma separated addresses values
+     * @return object Contains archive addresses details
      */
 
     public function archiveAddressesByAddress($addresses)
@@ -410,7 +392,12 @@ class LaraBlockIo
 
         return $this->blockIo->archive_addresses($array);
     }
-
+    
+    /**
+     * @param $labels string Containing comma separated labels values
+     * @return object Contains archive addresses details
+     */
+    
     public function archiveAddressesByLabels($labels)
     {
         $array = [
@@ -424,15 +411,8 @@ class LaraBlockIo
      * Unarchives upto 100 addresses in a single API call. Addresses can be
      * specified by their labels.
      *
-     * Receives an array of associative array of adresses or labels
-     *
-     * Ex:
-     *
-     * $array = array('addresses' => 'ADDRESS1,ADDRESS2,...')
-     *
-     * OR
-     *
-     * $array = array('labels' => 'LABEL1,LABEL2,...')
+     * @param $addresses string Containing comma separated addresses values
+     * @return object Contains unarchive addresses details
      */
 
     public function unarchiveAddressesByAddress($addresses)
@@ -443,7 +423,12 @@ class LaraBlockIo
 
         return $this->blockIo->unarchive_addresses($array);
     }
-
+    
+    /**
+     * @param $labels string Containing comma separated addresses values
+     * @return object Contains unarchive addresses details
+     */
+    
     public function unarchiveAddressesByLabels($labels)
     {
         $array = [
@@ -456,6 +441,7 @@ class LaraBlockIo
     /**
      * Returns all the archived addresses, their labels, and user ids on your
      * account.
+     * @return object Contains unarchive addresses details
      */
 
     public function getArchivedAddresses()
@@ -486,20 +472,10 @@ class LaraBlockIo
      * If a double spend is detected for an unconfirmed transaction, its
      * confidence rating falls to 0.0.
      *
-     * Receives the following arrays
-     *
-     * array('type' => 'sent')
-     * array('type' => 'received')
-     * array('type' => 'sent', 'before_tx' => 'TXID')
-     * array('type' => 'received', 'before_tx' => 'TXID')
-     * array('type' => 'received', 'addresses' => 'ADDRESS1,ADDRESS2,...')
-     * array('type' => 'received', 'user_ids' => 'USERID1,USERID2,...')
-     * array('type' => 'received', 'labels' => 'LABEL1,LABEL2,...')
-     * array('type' => 'sent', 'before_tx' => 'TXID',
-     *      'addresses' => 'ADDRESS1,ADDRESS2,...')
-     * array('type' => 'received', 'before_tx' => 'TXID',
-     *      'addresses' => 'ADDRESS1,ADDRESS2,...')
-     *
+     * @param $type string Containing the type 'sent' or 'received'
+     * @param $addresses string Containing comma separated addresses values
+     * @param $beforeTx string Containing transaction id
+     * @return object Contains transactions details
      */
 
     public function getTransactionsByAddresses(
@@ -524,7 +500,14 @@ class LaraBlockIo
 
         return $this->blockIo->get_transactions($array);
     }
-
+    
+   /** 
+    * @param $type string Containing the type 'sent' or 'received'
+    * @param $labels string Containing comma separated labels values
+    * @param $beforeTx string Containing transaction id
+    * @return object Contains transactions details
+    */
+    
     public function getTransactionsByLabels(
         $type, $labels, $beforeTx = null
     )
@@ -547,7 +530,14 @@ class LaraBlockIo
 
         return $this->blockIo->get_transactions($array);
     }
-
+    
+    /** 
+    * @param $type string Containing the type 'sent' or 'received'
+    * @param $userIds string Containing comma separated userIds values
+    * @param $beforeTx string Containing transaction id
+    * @return object Contains transactions details
+    */
+    
     public function getTransactionsByUserIds(
         $type, $userIds, $beforeTx = null
     )
@@ -570,7 +560,12 @@ class LaraBlockIo
 
         return $this->blockIo->get_transactions($array);
     }
-
+    
+    /** 
+    * @param $beforeTx string Containing transaction id
+    * @return object Contains received transactions details
+    */
+    
     public function getReceivedTransactions($beforeTx = null)
     {
         if(is_null($beforeTx)) $array = ['type' => 'received'];
@@ -578,7 +573,12 @@ class LaraBlockIo
 
         return $this->blockIo->get_transactions($array);
     }
-
+    
+    /** 
+    * @param $beforeTx string Containing transaction id
+    * @return object Contains sent transactions details
+    */
+    
     public function getSentTransactions($beforeTx = null)
     {
         if(is_null($beforeTx)) $array = ['type' => 'sent'];
@@ -592,6 +592,9 @@ class LaraBlockIo
      * Returns the prices from the largest exchanges for Bitcoin, Dogecoin,
      * or Litecoin, specified by the API Key. Specifying the base
      * currency is optional. It does not work with testnets.
+     * 
+     * @param $baseCurrency string Containing the base currency prefix ex: 'USD'
+     * @return object Contains price on the specified currency
      */
 
     public function getCurrentPrice($baseCurrency = null)
@@ -608,9 +611,8 @@ class LaraBlockIo
      * zero network confirmations. This API call does
      * not need an API Key.
      *
-     * Receives the following array
-     *
-     * array('transaction_ids' => 'TXID1,TXID2,...')
+     * @param $txsIds string Containing comma separated transaction ids values
+     * @return object Contains details on green transactions
      */
 
     public function isGreenTransaction($txIds)
@@ -622,18 +624,21 @@ class LaraBlockIo
 
     /**
      * Look for incoming transactions, and know when they have been processed.
-     * Returns true if the transactions are done.
      *
-     * We can do the number of pending transactions related to an adress, and
-     * calculate the expcted amount ourselves. Just asking for the
-     * confidence treshold and the recipient adress as inputs.
+     * We can get the number of pending transactions related to an address
+     * by asking for the confidence treshold and the recipient adress as 
+     * inputs.
+     * 
+     * @param $toAddress string Containing comma separated addresses values
+     * @param $confidenceThreshold duble Containing a value between 0 and 1
+     * @return object Contains pending transactions details  
      */
 
     public function getNotConfirmedTxs($toAddress, $confidenceThreshold)
     {
         $txs = $this->blockIo->get_transactions(
                         array('addresses' => $toAddress, 'type' => 'received')
-                   )->data->txs;
+                    )->data->txs;
 
         $txs = array_where($txs, function($value) use ($confidenceThreshold){
                     if($value->confidence < $confidenceThreshold
@@ -650,11 +655,11 @@ class LaraBlockIo
                 });
 
         return $txs;
-
     }
     
     /**
      * Get all dTrust addresses
+     * @return object Contains all dtrust addresses
      */
 
     public function getDTrustAddresses()
@@ -687,9 +692,17 @@ class LaraBlockIo
         }
 
         return $keys;
-
     }
-
+    
+    
+    /**
+     * Create a MultiSig address
+     * @params $label string Containing the label of the address
+     * @params $reqSigs integer Contining a value between 1 and 4
+     * @params $s1,$s2,$s3, $s4 string Containing the passphrases for signing
+     * @return object Contains MultiSig address details
+     */
+    
     public function createMultiSigAddress(
                         $label,
                         $reqSigs,
@@ -720,19 +733,34 @@ class LaraBlockIo
                                     )
                                 );
     }
-
+    
+    /**
+     * Get details of a dtrust address associated with a given label
+     * @params $label string Containing the label of a dtrust address
+     * @return object Contains detail associated with a dtrust addresses
+     */
+    
     public function getDTrustInfoByLabel($label)
     {
         $array = ['label' => $label];
 
         return $this->blockIo->get_dtrust_address_by_label($array);
     }
-
-    public function multiSigWithdraw($label, $toAddress, $amount)
+    
+    /**
+     * Perform a MultiSig withdraw, returns the withdraw object and the withdraw
+     * reference id for later signing off the withdraw.
+     * 
+     * @params $label string Containing the label of a dtrust address
+     * @params $toAddresses string Containing comma separated addresses values
+     * @return object Contains details of withdaw and its reference id
+     */
+    
+    public function multiSigWithdraw($label, $toAddresses, $amount)
     {
         $array = [
             'from_labels' => $label,
-            'to_addresses' => $toAddress,
+            'to_addresses' => $toAddresses,
             'amounts' => $amount
         ];
 
@@ -742,13 +770,6 @@ class LaraBlockIo
 
         return compact('response', 'reference_id');
     }
-
-    /**
-     * Returns the pending withdrawal from a MultiSig address. Receives the
-     * following parameter:
-     *
-     * array('reference_id' => 'REFERENCEID')
-     */
 
     protected function getKey($passphrase)
     {
@@ -788,15 +809,30 @@ class LaraBlockIo
                                     array('reference_id' => $reference_id)
                                );
     }
-
-    public function getMultiSigWithdraw($reference_id)
+    
+    /**
+     * Returns a MultiSig withdraw object for signing.
+     * 
+     * @params $referenceId string Containing the reference id of withdraw
+     * @return object Contains details of withdaw 
+     */
+    
+    public function getMultiSigWithdraw($referenceId)
     {
         
         return $this->blockIo->get_remaining_signers(
-                                    array('reference_id' => $reference_id)
+                                    array('reference_id' => $referenceId)
                                );
     }
-
+    
+    /**
+     * Sign a MultiSig withdraw.
+     * 
+     * @params $referenceId string Containing the reference id of withdraw
+     * @params $passphrase string Containing a valid siing passphrase
+     * @return object Contains details of transaction or required signatures
+     */
+    
     public function signMultiSigWithdraw($reference_id, $passphrase)
     {
         $response = $this->getMultiSigWithdraw($reference_id);
@@ -830,7 +866,14 @@ class LaraBlockIo
 
         return $reqSigs;
     }
-
+    
+    /**
+     * Returns sent dtrust transactions.
+     * 
+     * @params $beforeTx string Containing a transaction id 
+     * @return object Contains details of sent dtrust transactions
+     */
+    
     public function getSentDTrustTransactions($beforeTx = null)
     {
         if(is_null($beforeTx)) $array = ['type' => 'sent'];
@@ -839,6 +882,13 @@ class LaraBlockIo
         return $this->blockIo->get_dtrust_transactions($array);
     }
 
+    /**
+     * Returns received dtrust transactions.
+     * 
+     * @params $beforeTx string Containing a transaction id 
+     * @return object Contains details of received dtrust transactions
+     */
+
     public function getReceivedDTrustTransactions($beforeTx = null)
     {
         if(is_null($beforeTx)) $array = ['type' => 'received'];
@@ -846,7 +896,14 @@ class LaraBlockIo
 
         return $this->blockIo->get_dtrust_transactions($array);
     }
-
+    
+    /** 
+    * @param $type string Containing the type 'sent' or 'received'
+    * @param $addresses string Containing comma separated addresses values
+    * @param $beforeTx string Containing transaction id
+    * @return object Contains dtrust transactions details
+    */
+    
     public function getDtrustTransactionsByAddresses(
         $type, $addresses, $beforeTx = null
     )
@@ -869,7 +926,14 @@ class LaraBlockIo
 
         return $this->blockIo->get_dtrust_transactions($array);
     }
-
+    
+    /** 
+    * @param $type string Containing the type 'sent' or 'received'
+    * @param $labels string Containing comma separated labels values
+    * @param $beforeTx string Containing transaction id
+    * @return object Contains dtrust transactions details
+    */
+    
     public function getDtrustTransactionsByLabels(
         $type, $labels, $beforeTx = null)
     {
@@ -891,7 +955,14 @@ class LaraBlockIo
 
         return $this->blockIo->get_dtrust_transactions($array);
     }
-
+    
+    /** 
+    * @param $type string Containing the type 'sent' or 'received'
+    * @param $userIds string Containing comma separated user ids values
+    * @param $beforeTx string Containing transaction id
+    * @return object Contains dtrust transactions details
+    */
+    
     public function getDTrustTransactionsByUserIds(
         $type, $userIds, $beforeTx = null
     )
@@ -914,33 +985,59 @@ class LaraBlockIo
 
         return $this->blockIo->get_dtrust_transactions($array);
     }
-
+    
+    /** 
+    * @param $addresses string Containing comma separated addresses values
+    * @return object Contains dtrust address details
+    */
+    
     public function getDTrustAddressBalance($addresses)
     {
         return $this->blockIo->get_dtrust_address_balance([
                     'addresses' => $addresses
                ]);
     }
-
+    
+    /** 
+    * @param $addresses string Containing comma separated addresses values
+    * @return object Contains dtrust archive addresses details
+    */
+    
     public function archiveDTrustAddress($addresses)
     {
         $array = ['addresses' => $addresses];
 
         return $this->blockIo->archive_dtrust_address($array);
     }
-
+    
+    /** 
+    * @param $addresses string Containing comma separated addresses values
+    * @return object Contains dtrust unarchive addresses details
+    */
+    
     public function unarchiveDTrustAddress($addresses)
     {
         $array = ['addresses' => $addresses];
 
         return $this->blockIo->unarchive_dtrust_address($array);
     }
-
+    
+    /** 
+    * @return object Contains dtrust archived addresses details
+    */
+    
     public function getArchivedDTrustAddresses()
     {
         return $this->blockIo->get_my_archived_dtrust_addresses();
     }
-
+    
+    /** 
+    * @param $amounts string Containing comma separated amounts values
+    * @param $fromAddresses string Containing comma separated addresses values
+    * @param $toAddresses string Containing comma separated addresses values
+    * @return object Contains network fee estimate for dtrust transactions 
+    */
+    
     public function getNetworkDTrustFeeEstimate(
         $amounts, $fromAddress, $toAddress)
     {
@@ -950,13 +1047,22 @@ class LaraBlockIo
                         'to_addresses' => $toAddress
                     ]);
     }
-
-    public function sweepFromAddress($from_address, $to_address, $private_key)
+    
+    /** 
+    * @param $privateKey string Containing a private key to sweep funds
+    * @param $fromAddress string Containing address value
+    * @param $toAddress string Containing address value
+    * @return object Contains network fee estimate for dtrust transactions 
+    */
+    
+    public function sweepFromAddress($fromAddress, $toAddress, $privateKey)
     {
         return $this->blockIo->sweep_from_address(
-                                    array('from_address' => $from_address,
-                                    'to_address' => $to_address,
-                                    'private_key' => $private_key)
+                                    array(
+                                        'from_address' => $fromAddress,
+                                        'to_address' => $toAddress,
+                                        'private_key' => $privateKey
+                                    )
                                );
     }
 
