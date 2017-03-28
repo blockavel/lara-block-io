@@ -14,6 +14,7 @@ $ composer require blockavel/lara-block-io
 
 This will add the following lines to your composer.json and download the project and its dependencies to your projects ./vendor directory:
 
+```javascript
 // 
 
 ./composer.json
@@ -32,8 +33,55 @@ This will add the following lines to your composer.json and download the project
 
     //...
 }
+```
 
 ## Usage
 
-In order to use the static interface we must customize the application configuration to tell the system where it can find the new service. Open the file config/app.php and add the following lines ([1], [2]):
+In order to use the static interface we must customize the application configuration to tell the system where it can find the new service. Open the file config/app.php and add the following lines ([a], [b]):
 
+```php
+
+// config/app.php
+
+return [
+
+    // ...
+
+    'providers' => [
+
+        // ...
+
+        /*
+         * Package Service Providers...
+         */
+        Weidner\Goutte\GoutteServiceProvider::class, // [1]
+
+        /*
+         * Application Service Providers...
+         */
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+
+    ],
+
+    // ...
+
+    'aliases' => [
+
+        'App' => Illuminate\Support\Facades\App::class,
+        'Artisan' => Illuminate\Support\Facades\Artisan::class,
+
+        // ...
+
+        'Goutte' => Weidner\Goutte\GoutteFacade::class, // [2]
+        'Hash' => Illuminate\Support\Facades\Hash::class,
+
+        // ...
+    ],
+
+];
+
+
+```
