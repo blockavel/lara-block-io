@@ -1,6 +1,6 @@
 # blockavel/lara-block-io
 
-A Laravel package/facade for the Block.io PHP API.
+A Laravel package/facade for the Block.io API PHP wrapper.
 
 This repository implements a simple ServiceProvider that makes a singleton instance of the Block.io client easily accessible via a Facade in Laravel 5. 
 
@@ -8,15 +8,17 @@ See [@BlockIo/block_io-php](https://github.com/BlockIo/block_io-php) and the [Bl
 
 ## Requirements
 
-The BlockIo library requires the 'mcrypt', 'gmp', and cURL extensions for PHP as well as the bcmath library for PHP. To enable these extensions, see:
+First of all, sign up for an account at [Block.io](https://block.io/users/sign_up) and take note of your API key under Account > Dashboard.
 
-[mCrypt Installation Guide](http://php.net/manual/en/mcrypt.installation.php)
+The BlockIo library requires the 'mcrypt', 'gmp', and 'cURL' extensions for PHP as well as the 'bcmath' library. To enable these, please see:
 
-[GMP Installation Guide](http://php.net/manual/en/gmp.installation.php)
+-[mCrypt Installation Guide](http://php.net/manual/en/mcrypt.installation.php)
 
-[cURL Installation Guide](http://php.net/manual/en/curl.installation.php)
+-[GMP Installation Guide](http://php.net/manual/en/gmp.installation.php)
 
-[bcmath Installation Guide](http://php.net/manual/en/book.bc.php)
+-[cURL Installation Guide](http://php.net/manual/en/curl.installation.php)
+
+-[bcmath Installation Guide](http://php.net/manual/en/book.bc.php)
 
 ## Installation using [Composer](https://getcomposer.org)
 
@@ -245,3 +247,13 @@ LaraBlockIo::getNetworkDTrustFeeEstimate($amounts, $fromAddress, $toAddress);
 // Sweep funds from external address to a BlockIo address.
 LaraBlockIo::sweepFromAddress($fromAddress, $toAddress, $privateKey);
 ```
+## Contributing
+
+Find an area you can help with and do it. Open source is about collaboration and open participation. 
+Try to make your code look like what already exists or better and submit a pull request. Also, if
+you have any ideas on how to make the code better or on improving the scope and functionality please
+contact any of the contributors.
+
+## License
+
+MIT License.
