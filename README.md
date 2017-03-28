@@ -4,17 +4,19 @@ A Laravel package/facade for the Block.io PHP API.
 
 This repository implements a simple ServiceProvider that makes a singleton instance of the Block.io client easily accessible via a Facade in Laravel 5. 
 
-See [@BlockIo/block_io-php](https://github.com/BlockIo/block_io-php) for more information about the PHP library for Block.io and itsinterfaces.
+See [@BlockIo/block_io-php](https://github.com/BlockIo/block_io-php) and the [BlockIo PHP API docs](https://block.io/api/simple/php) for more information about the PHP library for Block.io and its interfaces.
 
 ## Requirements
 
-The BlockIo library requires the 'mcrypt', 'gmp', and cURL extensions for PHP. To enable these extensions, see:
+The BlockIo library requires the 'mcrypt', 'gmp', and cURL extensions for PHP as well as the bcmath library for PHP. To enable these extensions, see:
 
 [mCrypt Installation Guide](http://php.net/manual/en/mcrypt.installation.php)
 
 [GMP Installation Guide](http://php.net/manual/en/gmp.installation.php)
 
 [cURL Installation Guide](http://php.net/manual/en/curl.installation.php)
+
+[bcmath Installation Guide](http://php.net/manual/en/book.bc.php)
 
 ## Installation using [Composer](https://getcomposer.org)
 
@@ -109,9 +111,12 @@ This will create a config/larablockio.php file in your app that you can modify t
 Now you should be able to use the facade within your application. Laravel will autoload the corresponding classes once you use the registered alias.
 
 ```php
+namespace App;
 
-class BlockIoTest{
-    
+use Illuminate\Database\Eloquent\Model;
+
+class BlockIoTest extends Model
+{
     /**
      * @returns object Containing BlockIo object.
      */
