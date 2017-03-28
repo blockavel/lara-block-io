@@ -132,16 +132,41 @@ class BlockIoTest extends Model
 
 ## List of Available Methods
 
-```php 
-LaraBlockIo::getBlockIo() // BlockIo getter method, returns a BlockIo object.
-LaraBlockIo::getBalanceInfo() // Get the balance information associated with a Bitcoin Dogecoin, or Litecoin account.
-LaraBlockIo::getNetwork()  // Get the Network associated with your API KEY.
-LaraBlockIo::getAvailableBalance() // Get the balance associated with all your addresses in the selected network.
-LaraBlockIo::getPendingReceivedBalance() // Get the the balance that's pending confirmation in the selected network.
-LaraBlockIo::createAddress($label) // Create new address.
-LaraBlockIo::getAddressesInfo() // Get all the (unarchived) addresses information.
-LaraBlockIo::getAddressesInfoWithoutBalances() // Get all the (unarchived) addresses information without balance.
-LaraBlockIo::getAddresses() // Get the (unarchived) addresses associated with your account.
-LaraBlockIo::getAddressesWithoutBalances() // Get the (unarchived) addresses associated with your account without balance.
-LaraBlockIo::getAddressesBalanceByAddress($addresses) // Get address(es) balance by specified address(es).
+```php
+// BlockIo getter method, returns a BlockIo object.
+LaraBlockIo::getBlockIo();
+// Get the balance information associated with a Bitcoin Dogecoin, or Litecoin account.
+LaraBlockIo::getBalanceInfo();
+// Get the Network associated with your API KEY.
+LaraBlockIo::getNetwork();  
+// Get the balance associated with all your addresses in the selected network.
+LaraBlockIo::getAvailableBalance();
+// Get the the balance that's pending confirmation in the selected network.
+LaraBlockIo::getPendingReceivedBalance();
+// Create new address.
+LaraBlockIo::createAddress($label); 
+// Get all the (unarchived) addresses information.
+LaraBlockIo::getAddressesInfo();
+// Get all the (unarchived) addresses information without balance.
+LaraBlockIo::getAddressesInfoWithoutBalances(); 
+// Get the (unarchived) addresses associated with your account.
+LaraBlockIo::getAddresses(); 
+// Get the (unarchived) addresses associated with your account without balance.
+LaraBlockIo::getAddressesWithoutBalances();
+// Get address(es) balance by specified address(es).
+LaraBlockIo::getAddressesBalanceByAddress($addresses);
+// Get address(es) balance by specified label(s).
+LaraBlockIo::getAddressesBalanceByLabels($labels);
+// Get address by label.
+LaraBlockIo::getAddressByLabel($label);
+// Get all the users associated with your account in a given network.
+LaraBlockIo::getUsers()
+// Get user(s) balance.
+LaraBlockIo::getUsersBalance($userIds);
+// Get a user's address.
+LaraBlockIo::getUserAddress($userId);
+// Get network fee estimate for transacting (withdrawing, sending).
+LaraBlockIo::getNetworkFeeEstimate($amounts, $addresses);
+// Withdraws amount of coins from any addresses in your account.
+LaraBlockIo::withdraw($amounts, $toAddresses, $nonce = null)
 ```
