@@ -1,4 +1,4 @@
-# lara-block-io
+# blockavel/lara-block-io
 
 A Laravel package/facade for the Block.io PHP API.
 
@@ -86,10 +86,30 @@ return [
 
 ```
 
-##Publish vendor
+## Publish Vendor
 
 lara-block-io requires a connection configuration. To get started, you'll need to publish all vendor assets running:
 
 php artisan vendor:publish
 
 This will create a config/larablockio.php file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
+
+## Quick Start
+
+Now you should be able to use the facade within your application. Laravel will autoload the corresponding classes once you use the registered alias.
+
+```php
+
+class BlockIoTest{
+    
+    /**
+     * @returns object BlockIo object.
+     */
+     
+    public function test()
+    {
+        return LaraBlockIo::getBlockIo();
+    }
+}
+
+```
