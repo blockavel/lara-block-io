@@ -54,7 +54,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Weidner\Goutte\GoutteServiceProvider::class, // [1]
+        Blockavel\LaraBlockIo\LaraBlockIoServiceProvider::class, // [a]
 
         /*
          * Application Service Providers...
@@ -75,7 +75,7 @@ return [
 
         // ...
 
-        'Goutte' => Weidner\Goutte\GoutteFacade::class, // [2]
+        'LaraBlockIo' => 'Blockavel\LaraBlockIo\LaraBlockIoFacade', // [b]
         'Hash' => Illuminate\Support\Facades\Hash::class,
 
         // ...
@@ -85,3 +85,11 @@ return [
 
 
 ```
+
+##Publish vendor
+
+lara-block-io requires a connection configuration. To get started, you'll need to publish all vendor assets running:
+
+php artisan vendor:publish
+
+This will create a config/larablockio.php file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
