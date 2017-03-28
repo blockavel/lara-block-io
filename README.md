@@ -168,5 +168,61 @@ LaraBlockIo::getUserAddress($userId);
 // Get network fee estimate for transacting (withdrawing, sending).
 LaraBlockIo::getNetworkFeeEstimate($amounts, $addresses);
 // Withdraws amount of coins from any addresses in your account.
-LaraBlockIo::withdraw($amounts, $toAddresses, $nonce = null)
+LaraBlockIo::withdraw($amounts, $toAddresses, $nonce = null);
+// Withdraws amount of coins from specific addresses in your account.
+LaraBlockIo::withdrawFromAddressesToAddresses($amounts, $fromAddresses, $toAddresses, $nonce = null);
+LaraBlockIo::withdrawFromLabelsToLabels($amounts, $fromLabels, $toLabels, $nonce = null);
+LaraBlockIo::withdrawFromLabelsToAddresses($amounts, $fromLabels, $toAddresses, $nonce = null);
+// Archive adress(es).
+LaraBlockIo::archiveAddressesByAddress($addresses);
+LaraBlockIo::archiveAddressesByLabels($labels);
+// Unarchive address(es)
+LaraBlockIo::unarchiveAddressesByAddress($addresses);
+LaraBlockIo::unarchiveAddressesByLabels($labels);
+// Returns all the archived addresses.
+LaraBlockIo::getArchivedAddresses();
+// Returns various data for transactions spent or received.
+LaraBlockIo::getTransactionsByAddresses($type, $addresses, $beforeTx = null);
+LaraBlockIo::getTransactionsByLabels($type, $labels, $beforeTx = null);
+LaraBlockIo::getTransactionsByUserIds($type, $userIds, $beforeTx = null);
+LaraBlockIo::getReceivedTransactions($beforeTx = null);
+LaraBlockIo::getSentTransactions($beforeTx = null);
+// Returns the prices from the largest exchanges for the given network.
+LaraBlockIo::getCurrentPrice($baseCurrency = null);
+// Returns an array of transactions that were sent by Block.io Green Addresses.
+LaraBlockIo::isGreenTransaction($txIds);
+// Get pending transactions.
+LaraBlockIo::getNotConfirmedTxs($toAddress, $confidenceThreshold);
+// Get all dtrust addresses.
+LaraBlockIo::getDTrustAddresses();
+// Create a MultiSig address.
+LaraBlockIo::createMultiSigAddress($label, $reqSigs, $s1, $s2, $s3 = null, $s4 = null);
+// Get details of a dtrust address associated with a given label.
+LaraBlockIo::getDTrustInfoByLabel($label);
+// Perform a MultiSig withdraw.
+LaraBlockIo::multiSigWithdraw($label, $toAddresses, $amount);
+// Returns a MultiSig withdraw object for signing.
+LaraBlockIo::getMultiSigWithdraw($referenceId);
+// Sign MultiSig withdraw.
+LaraBlockIo::signMultiSigWithdraw($reference_id, $passphrase);
+// Returns sent dtrust transactions.
+LaraBlockIo::getSentDTrustTransactions($beforeTx = null);
+// Returns received dtrust transactions.
+LaraBlockIo::etReceivedDTrustTransactions($beforeTx = null);
+// Returns information associated with dtrust transactions.
+LaraBlockIo::getDtrustTransactionsByAddresses($type, $addresses, $beforeTx = null);
+LaraBlockIo::getDtrustTransactionsByLabels($type, $labels, $beforeTx = null);
+LaraBlockIo::getDTrustTransactionsByUserIds($type, $userIds, $beforeTx = null);
+// Get balance associated with dtrust addresses.
+LaraBlockIo::getDTrustAddressBalance($addresses);
+// Archive dtrust addresses.
+LaraBlockIo::rchiveDTrustAddress($addresses);
+// Unarchive dtrust addresses.
+LaraBlockIo::unarchiveDTrustAddress($addresses);
+// Get archived addresses.
+LaraBlockIo::getArchivedDTrustAddresses();
+// Get estimated network fee for dtrust transactions.
+LaraBlockIo::getNetworkDTrustFeeEstimate($amounts, $fromAddress, $toAddress);
+// Sweep funds from external address to a BlockIo address.
+LaraBlockIo::sweepFromAddress($fromAddress, $toAddress, $privateKey);
 ```
