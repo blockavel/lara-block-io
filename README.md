@@ -106,9 +106,7 @@ php artisan vendor:publish
 
 This will create a config/larablockio.php file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
 
-## Quick Start
-
-Now you should be able to use the facade within your application. Laravel will autoload the corresponding classes once you use the registered alias.
+Now you should be able to use the facade within your application. Laravel will autoload the corresponding classes once you use the registered alias. Ex:
 
 ```php
 namespace App;
@@ -118,13 +116,22 @@ use Illuminate\Database\Eloquent\Model;
 class BlockIoTest extends Model
 {
     /**
-     * @returns object Containing BlockIo object.
+     * Get the balance information associated with a Bitcoin Dogecoin,
+     * or Litecoin account.
+     *
+     * @return object Contains balance information
      */
      
     public function test()
     {
-        return LaraBlockIo::getBlockIo();
+        return LaraBlockIo::getBalanceInfo();
     }
 }
 
 ```
+
+## List of Available Methods
+
+```php LaraBlockIo::getBlockIo() ``` BlockIo getter method, returns a BlockIo object.
+```php LaraBlockIo::getBalanceInfo() ``` Get the balance information associated with a Bitcoin Dogecoin, or Litecoin account.
+```php LaraBlockIo::getNetwork() ``` Get the Network associated with your API KEY
