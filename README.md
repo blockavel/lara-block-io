@@ -132,6 +132,7 @@ class BlockIoTest extends Model
 
 ## List of Available Methods
 
+### Balance and Network Info 
 ```php
 // BlockIo getter method, returns a BlockIo object.
 LaraBlockIo::getBlockIo();
@@ -143,6 +144,17 @@ LaraBlockIo::getNetwork();
 LaraBlockIo::getAvailableBalance();
 // Get the the balance that's pending confirmation in the selected network.
 LaraBlockIo::getPendingReceivedBalance();
+// Get address(es) balance by specified address(es).
+LaraBlockIo::getAddressesBalanceByAddress($addresses);
+// Get address(es) balance by specified label(s).
+LaraBlockIo::getAddressesBalanceByLabels($labels);
+// Get user(s) balance.
+LaraBlockIo::getUsersBalance($userIds);
+// Get network fee estimate for transacting (withdrawing, sending).
+LaraBlockIo::getNetworkFeeEstimate($amounts, $addresses);
+```
+### Addresses
+```php
 // Create new address.
 LaraBlockIo::createAddress($label); 
 // Get all the (unarchived) addresses information.
@@ -153,26 +165,24 @@ LaraBlockIo::getAddressesInfoWithoutBalances();
 LaraBlockIo::getAddresses(); 
 // Get the (unarchived) addresses associated with your account without balance.
 LaraBlockIo::getAddressesWithoutBalances();
-// Get address(es) balance by specified address(es).
-LaraBlockIo::getAddressesBalanceByAddress($addresses);
-// Get address(es) balance by specified label(s).
-LaraBlockIo::getAddressesBalanceByLabels($labels);
 // Get address by label.
 LaraBlockIo::getAddressByLabel($label);
 // Get all the users associated with your account in a given network.
 LaraBlockIo::getUsers()
-// Get user(s) balance.
-LaraBlockIo::getUsersBalance($userIds);
 // Get a user's address.
 LaraBlockIo::getUserAddress($userId);
-// Get network fee estimate for transacting (withdrawing, sending).
-LaraBlockIo::getNetworkFeeEstimate($amounts, $addresses);
+```
+### Withdraw
+```php
 // Withdraws amount of coins from any addresses in your account.
 LaraBlockIo::withdraw($amounts, $toAddresses, $nonce = null);
 // Withdraws amount of coins from specific addresses in your account.
 LaraBlockIo::withdrawFromAddressesToAddresses($amounts, $fromAddresses, $toAddresses, $nonce = null);
 LaraBlockIo::withdrawFromLabelsToLabels($amounts, $fromLabels, $toLabels, $nonce = null);
 LaraBlockIo::withdrawFromLabelsToAddresses($amounts, $fromLabels, $toAddresses, $nonce = null);
+```
+### Archive
+```php
 // Archive adress(es).
 LaraBlockIo::archiveAddressesByAddress($addresses);
 LaraBlockIo::archiveAddressesByLabels($labels);
@@ -181,6 +191,9 @@ LaraBlockIo::unarchiveAddressesByAddress($addresses);
 LaraBlockIo::unarchiveAddressesByLabels($labels);
 // Returns all the archived addresses.
 LaraBlockIo::getArchivedAddresses();
+```
+### Transactions
+```php
 // Returns various data for transactions spent or received.
 LaraBlockIo::getTransactionsByAddresses($type, $addresses, $beforeTx = null);
 LaraBlockIo::getTransactionsByLabels($type, $labels, $beforeTx = null);
@@ -193,6 +206,9 @@ LaraBlockIo::getCurrentPrice($baseCurrency = null);
 LaraBlockIo::isGreenTransaction($txIds);
 // Get pending transactions.
 LaraBlockIo::getNotConfirmedTxs($toAddress, $confidenceThreshold);
+```
+### DTrust
+```php
 // Get all dtrust addresses.
 LaraBlockIo::getDTrustAddresses();
 // Create a MultiSig address.
@@ -208,7 +224,7 @@ LaraBlockIo::signMultiSigWithdraw($reference_id, $passphrase);
 // Returns sent dtrust transactions.
 LaraBlockIo::getSentDTrustTransactions($beforeTx = null);
 // Returns received dtrust transactions.
-LaraBlockIo::etReceivedDTrustTransactions($beforeTx = null);
+LaraBlockIo::getReceivedDTrustTransactions($beforeTx = null);
 // Returns information associated with dtrust transactions.
 LaraBlockIo::getDtrustTransactionsByAddresses($type, $addresses, $beforeTx = null);
 LaraBlockIo::getDtrustTransactionsByLabels($type, $labels, $beforeTx = null);
@@ -216,13 +232,16 @@ LaraBlockIo::getDTrustTransactionsByUserIds($type, $userIds, $beforeTx = null);
 // Get balance associated with dtrust addresses.
 LaraBlockIo::getDTrustAddressBalance($addresses);
 // Archive dtrust addresses.
-LaraBlockIo::rchiveDTrustAddress($addresses);
+LaraBlockIo::archiveDTrustAddress($addresses);
 // Unarchive dtrust addresses.
 LaraBlockIo::unarchiveDTrustAddress($addresses);
 // Get archived addresses.
 LaraBlockIo::getArchivedDTrustAddresses();
 // Get estimated network fee for dtrust transactions.
 LaraBlockIo::getNetworkDTrustFeeEstimate($amounts, $fromAddress, $toAddress);
+```
+### Sweep Funds
+```php
 // Sweep funds from external address to a BlockIo address.
 LaraBlockIo::sweepFromAddress($fromAddress, $toAddress, $privateKey);
 ```
