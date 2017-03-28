@@ -132,9 +132,16 @@ class BlockIoTest extends Model
 
 ## List of Available Methods
 
-- 
 ```php 
-    LaraBlockIo::getBlockIo() 
-``` 
-BlockIo getter method, returns a BlockIo object.
-
+LaraBlockIo::getBlockIo() // BlockIo getter method, returns a BlockIo object.
+LaraBlockIo::getBalanceInfo() // Get the balance information associated with a Bitcoin Dogecoin, or Litecoin account.
+LaraBlockIo::getNetwork()  // Get the Network associated with your API KEY.
+LaraBlockIo::getAvailableBalance() // Get the balance associated with all your addresses in the selected network.
+LaraBlockIo::getPendingReceivedBalance() // Get the the balance that's pending confirmation in the selected network.
+LaraBlockIo::createAddress($label) // Create new address.
+LaraBlockIo::getAddressesInfo() // Get all the (unarchived) addresses information.
+LaraBlockIo::getAddressesInfoWithoutBalances() // Get all the (unarchived) addresses information without balance.
+LaraBlockIo::getAddresses() // Get the (unarchived) addresses associated with your account.
+LaraBlockIo::getAddressesWithoutBalances() // Get the (unarchived) addresses associated with your account without balance.
+LaraBlockIo::getAddressesBalanceByAddress($addresses) // Get address(es) balance by specified address(es).
+```
