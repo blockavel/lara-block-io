@@ -2,13 +2,13 @@
 
 A Laravel package/facade for the Block.io API PHP wrapper.
 
-This repository implements a simple ServiceProvider that makes a singleton instance of the Block.io client easily accessible via a Facade in Laravel 5. 
+This repository implements a simple Service Provider of the Block.io client, and makes it easily accessible via a Facade in Laravel >= 5. 
 
-See [@BlockIo/block_io-php](https://github.com/BlockIo/block_io-php) and the [BlockIo PHP API docs](https://block.io/api/simple/php) for more information about the PHP library for Block.io and its interfaces.
+See [@BlockIo/block_io-php](https://github.com/BlockIo/block_io-php) and the [BlockIo PHP API docs](https://block.io/api/simple/php) for more information about the PHP wrapper of the Block.io API and its interfaces.
 
 ## Requirements
 
-First of all, sign up for an account at [Block.io](https://block.io/users/sign_up) and take note of your API key under Account > Dashboard.
+Create an account at [Block.io](https://block.io/users/sign_up) and take note of your API key under Account > Dashboard.
 
 The BlockIo library requires the 'mcrypt', 'gmp', and 'cURL' extensions for PHP as well as the 'bcmath' library. To enable these, please see:
 
@@ -22,9 +22,9 @@ The BlockIo library requires the 'mcrypt', 'gmp', and 'cURL' extensions for PHP 
 
 ## Installation using [Composer](https://getcomposer.org)
 
-In your terminal application move to the root directory of your laravel project using the cd command and require theproject as a dependency using composer.
+In your terminal application move to the root directory of your laravel project using the cd command and require the project as a dependency using composer.
 
-$ composer require blockavel/lara-block-io
+composer require blockavel/lara-block-io
 
 This will add the following lines to your composer.json and download the project and its dependencies to your projects ./vendor directory:
 
@@ -106,9 +106,9 @@ lara-block-io requires a connection configuration. To get started, you'll need t
 
 php artisan vendor:publish
 
-This will create a config/larablockio.php file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
+This will create a config/larablockio.php file in your app that you can modify to set your configuration. Make sure you check for changes compared to the original config file after an upgrade.
 
-Now you should be able to use the facade within your application. Laravel will autoload the corresponding classes once you use the registered alias. Ex:
+Now you should be able to use the facade within your application. Ex:
 
 ```php
 namespace App;
