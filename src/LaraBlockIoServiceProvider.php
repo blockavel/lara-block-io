@@ -14,10 +14,10 @@ class LaraBlockIoServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/config/main.php' => config_path('larablockio.php'),
+            __DIR__.'/config/main.php' => config_path('larablockio.php'),
         ]);
 
-        $file = __DIR__ . '/../vendor/autoload.php';
+        $file = __DIR__.'/../vendor/autoload.php';
 
         if (file_exists($file)) {
             require $file;
@@ -31,8 +31,8 @@ class LaraBlockIoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('lara-block-io', function() {
-            return new LaraBlockIo;
+        $this->app->bind('lara-block-io', function () {
+            return new LaraBlockIo();
         });
     }
 }
