@@ -86,7 +86,7 @@ class LaraBlockIo
      */
     public function createAddress($label)
     {
-        return $this->blockIo->get_new_address([ 'label' => $label ]);
+        return $this->blockIo->get_new_address(['label' => $label]);
     }
 
     /**
@@ -147,7 +147,7 @@ class LaraBlockIo
      */
     public function getAddressesBalanceByAddress($addresses)
     {
-        return $this->blockIo->get_address_balance([ 'addresses' => $addresses ]);
+        return $this->blockIo->get_address_balance(['addresses' => $addresses]);
     }
 
     /**
@@ -162,7 +162,7 @@ class LaraBlockIo
      */
     public function getAddressesBalanceByLabels($labels)
     {
-        return $this->blockIo->get_address_balance([ 'label' => $labels ]);
+        return $this->blockIo->get_address_balance(['label' => $labels]);
     }
 
     /**
@@ -174,7 +174,7 @@ class LaraBlockIo
      */
     public function getAddressByLabel($label)
     {
-        return $this->blockIo->get_address_by_label([ 'label' => $label ]);
+        return $this->blockIo->get_address_by_label(['label' => $label]);
     }
 
     /**
@@ -196,7 +196,7 @@ class LaraBlockIo
      */
     public function getUsersBalance($userIds)
     {
-        return $this->blockIo->get_user_balance([ 'user_id' => $userIds ]);
+        return $this->blockIo->get_user_balance(['user_id' => $userIds]);
     }
 
     /**
@@ -208,7 +208,7 @@ class LaraBlockIo
      */
     public function getUserAddress($userId)
     {
-        return $this->blockIo->get_user_address([ 'user_id' => $userId ]);
+        return $this->blockIo->get_user_address(['user_id' => $userId]);
     }
 
     /**
@@ -605,7 +605,7 @@ class LaraBlockIo
      */
     public function isGreenTransaction($txIds)
     {
-        $array = [ 'transaction_ids' => $txIds ];
+        $array = ['transaction_ids' => $txIds];
 
         return $this->blockIo->is_green_transaction($array);
     }
@@ -733,7 +733,7 @@ class LaraBlockIo
      */
     public function getDTrustInfoByLabel($label)
     {
-        $array = [ 'label' => $label ];
+        $array = ['label' => $label];
 
         return $this->blockIo->get_dtrust_address_by_label($array);
     }
@@ -985,7 +985,7 @@ class LaraBlockIo
      */
     public function archiveDTrustAddress($addresses)
     {
-        $array = [ 'addresses' => $addresses ];
+        $array = ['addresses' => $addresses];
 
         return $this->blockIo->archive_dtrust_address($array);
     }
@@ -997,7 +997,7 @@ class LaraBlockIo
      */
     public function unarchiveDTrustAddress($addresses)
     {
-        $array = [ 'addresses' => $addresses ];
+        $array = ['addresses' => $addresses];
 
         return $this->blockIo->unarchive_dtrust_address($array);
     }
