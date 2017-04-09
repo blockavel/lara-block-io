@@ -4,10 +4,10 @@ namespace Blockavel\LaraBlockIo;
 
 use Illuminate\Support\Facades\Facade;
 
-    class LaraBlockIoFacade extends Facade
+class LaraBlockIoFacade extends Facade
+{
+    protected static function getFacadeAccessor()
     {
-        protected static function getFacadeAccessor()
-        {
-            return 'lara-block-io';
-        }
+        return 'lara-block-io';
     }
+}
