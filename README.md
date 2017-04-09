@@ -1,5 +1,7 @@
 # blockavel/lara-block-io
 
+[![StyleCI](https://styleci.io/repos/83922877/shield?branch=master)](https://styleci.io/repos/83922877)
+
 A Laravel package/facade for the Block.io API PHP wrapper.
 
 This repository implements a simple Service Provider of the Block.io client, and makes it easily accessible via a Facade in Laravel >= 5. 
