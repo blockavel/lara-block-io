@@ -20,7 +20,7 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
     protected function getPackageAliases($app)
     {
         return [
-            'LaraBlockIo' => 'Blockavel\LaraBlockIo\LaraBlockIoFacade'
+            'LaraBlockIo' => 'Blockavel\LaraBlockIo\LaraBlockIoFacade',
         ];
     }
 
@@ -31,15 +31,17 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $app['config']->set('larablockio.version', getenv('BLOCKIO_VERSION'));
     }
 
-    public function randomString($length = 10) {
-    	$str = "";
-    	$characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
-    	$max = count($characters) - 1;
-    	for ($i = 0; $i < $length; $i++) {
-    		$rand = mt_rand(0, $max);
-    		$str .= $characters[$rand];
-    	}
-    	return $str;
+    public function randomString($length = 10)
+    {
+        $str = '';
+        $characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
+        $max = count($characters) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $rand = mt_rand(0, $max);
+            $str .= $characters[$rand];
+        }
+
+        return $str;
     }
 
     public function setProperties()
@@ -72,7 +74,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetBalanceInfo()
     {
-
         $res = LaraBlockIo::getBalanceInfo();
         $this->assertTrue(gettype($res) == 'object');
         $this->assertArrayHasKey('status', (array) $res);
@@ -81,22 +82,19 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('available_balance', (array) $res->data);
         $this->assertArrayHasKey('pending_received_balance', (array) $res->data);
         sleep(1);
-
     }
 
     public function testGetNetwork()
     {
-
         $res = LaraBlockIo::getNetwork();
 
-        $this->assertTrue($res == 'BTCTEST' || $res = "LTCTEST" || $res = "DGCTEST");
+        $this->assertTrue($res == 'BTCTEST' || $res = 'LTCTEST' || $res = 'DGCTEST');
 
         sleep(1);
     }
 
     public function testGetAvailableBalance()
     {
-
         $res = LaraBlockIo::getAvailableBalance();
 
         $this->assertTrue(is_numeric($res) && $res >= 0);
@@ -106,7 +104,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetPendingReceivedBalance()
     {
-
         $res = LaraBlockIo::getPendingReceivedBalance();
 
         $this->assertTrue(is_numeric($res) && $res >= 0);
@@ -116,7 +113,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testCreateAddress()
     {
-
         $label = $this->randomString();
 
         $res = LaraBlockIo::createAddress($label);
@@ -144,7 +140,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetAddressInfo()
     {
-
         $res = LaraBlockIo::getAddressesInfo();
 
         $this->assertArrayHasKey('data', (array) $res);
@@ -158,7 +153,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetAddressesInfoWithoutBalances()
     {
-
         $res = LaraBlockIo::getAddressesInfoWithoutBalances();
 
         $this->assertArrayHasKey('data', (array) $res);
@@ -170,7 +164,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetAddresses()
     {
-
         $res = LaraBlockIo::getAddresses();
 
         $this->assertArrayHasKey('user_id', (array) $res[0]);
@@ -184,7 +177,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetAddressesWithoutBalance()
     {
-
         $res = LaraBlockIo::getAddresses();
 
         $this->assertArrayHasKey('user_id', (array) $res[0]);
@@ -196,7 +188,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetAddressesBalanceByAddress()
     {
-
         $addresses = LaraBlockIo::getAddresses()[0]->address;
 
         sleep(1);
@@ -221,12 +212,10 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $res = LaraBlockIo::getAddressesBalanceByAddress($addresses);
 
         sleep(1);
-
     }
 
     public function testGetAddressesBalanceByLabels()
     {
-
         $labels = LaraBlockIo::getAddresses()[0]->label;
 
         sleep(1);
@@ -255,7 +244,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetAddressByLabel()
     {
-
         $label = LaraBlockIo::getAddresses()[0]->label;
 
         sleep(1);
@@ -284,7 +272,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetUsers()
     {
-
         $res = LaraBlockIo::getUsers();
 
         sleep(1);
@@ -299,7 +286,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetUsersBalance()
     {
-
         $users = LaraBlockIo::getUsers()->data->addresses[0]->user_id;
 
         sleep(1);
@@ -329,7 +315,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetUserAddress()
     {
-
         $user = LaraBlockIo::getUsers()->data->addresses[0]->user_id;
 
         sleep(1);
@@ -362,17 +347,15 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetNetworkFeeEstimate()
     {
-
         $addresses = LaraBlockIo::getAddresses();
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
 
         $amount = $addresses[0]->available_balance * 0.5;
 
-        if($amount > .001)
-        {
+        if ($amount > .001) {
             $address = $addresses[count($addresses) - 1];
 
             $res = LaraBlockIo::getNetworkFeeEstimate($amount, $address->address);
@@ -401,7 +384,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $res = LaraBlockIo::getNetworkFeeEstimate($amount, $address);
 
         sleep(1);
-
     }
 
     public function testWithdraw()
@@ -410,10 +392,9 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
 
-        if($addresses[0]->available_balance * 0.5 > 0.002)
-        {
+        if ($addresses[0]->available_balance * 0.5 > 0.002) {
             $amount = .001;
             $toAddresses = $addresses[count($addresses) - 1]->address;
             $res = LaraBlockIo::withdraw($amount, $toAddresses);
@@ -453,10 +434,9 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
 
-        if($addresses[0]->available_balance * 0.5 > 0.002)
-        {
+        if ($addresses[0]->available_balance * 0.5 > 0.002) {
             $amounts = .001;
             $fromAddresses = $addresses[0]->address;
             $toAddresses = $addresses[count($addresses) - 1]->address;
@@ -501,19 +481,17 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $res = LaraBlockIo::withdrawFromAddressesToAddresses($amounts, $fromAddresses, $toAddresses);
 
         sleep(1);
-
     }
 
     public function testWithdrawFromLabelsToLabels()
     {
         $addresses = LaraBlockIo::getAddresses();
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
 
         sleep(1);
 
-        if($addresses[0]->available_balance * 0.5 > 0.002)
-        {
+        if ($addresses[0]->available_balance * 0.5 > 0.002) {
             $amounts = .001;
             $fromLabels = $addresses[0]->label;
             $toLabels = $addresses[count($addresses) - 1]->label;
@@ -551,12 +529,11 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
         $amounts = 0;
         $fromLabels = $addresses[0]->label;
-            $toLabels = $addresses[count($addresses) - 1]->label;
+        $toLabels = $addresses[count($addresses) - 1]->label;
 
         $res = LaraBlockIo::withdrawFromLabelsToLabels($amounts, $fromLabels, $toLabels);
 
         sleep(1);
-
     }
 
     public function testWithdrawFromLabelsToAddresses()
@@ -565,10 +542,9 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
 
-        if($addresses[0]->available_balance * 0.5 > 0.002)
-        {
+        if ($addresses[0]->available_balance * 0.5 > 0.002) {
             $amounts = .001;
             $fromLabels = $addresses[0]->label;
             $toAddresses = $addresses[count($addresses) - 1]->address;
@@ -675,7 +651,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetArchivedAddresses()
     {
-
         $label = LaraBlockIo::getAddresses()[count(LaraBlockIo::getAddresses()) - 1]->label;
 
         sleep(1);
@@ -700,9 +675,9 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetTransactionsByAddresses()
     {
-        $type = array_rand(array('sent' => 0,'received' => 1));
-        $addresses = LaraBlockIo::getAddresses();;
-        usort($addresses, array($this, "cmp"));
+        $type = array_rand(['sent' => 0, 'received' => 1]);
+        $addresses = LaraBlockIo::getAddresses();
+        usort($addresses, [$this, 'cmp']);
         $address = $addresses[0]->address;
 
         $res = LaraBlockIo::getTransactionsByAddresses($type, $address);
@@ -712,19 +687,15 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('txs', (array) $res->data);
-        if(count($res->data->txs) > 0)
-        {
-           $this->assertArrayHasKey('txid', (array) $res->data->txs[0]);
+        if (count($res->data->txs) > 0) {
+            $this->assertArrayHasKey('txid', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('from_green_address', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('time', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confirmations', (array) $res->data->txs[0]);
-            if(strcasecmp($type, 'sent') == 0)
-            {
+            if (strcasecmp($type, 'sent') == 0) {
                 $this->assertArrayHasKey('total_amount_sent', (array) $res->data->txs[0]);
                 $this->assertArrayHasKey('amounts_sent', (array) $res->data->txs[0]);
-            }
-            else
-            {
+            } else {
                 $this->assertArrayHasKey('amounts_received', (array) $res->data->txs[0]);
             }
             $this->assertArrayHasKey('senders', (array) $res->data->txs[0]);
@@ -749,9 +720,9 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetTransactionsByLabels()
     {
-        $type = array_rand(array('sent' => 0,'received' => 1));
-        $addresses = LaraBlockIo::getAddresses();;
-        usort($addresses, array($this, "cmp"));
+        $type = array_rand(['sent' => 0, 'received' => 1]);
+        $addresses = LaraBlockIo::getAddresses();
+        usort($addresses, [$this, 'cmp']);
         $label = $addresses[0]->label;
 
         $res = LaraBlockIo::getTransactionsByLabels($type, $label);
@@ -761,24 +732,20 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('txs', (array) $res->data);
-        
-        if(count($res->data->txs) > 0)
-        {
+
+        if (count($res->data->txs) > 0) {
             $this->assertArrayHasKey('txid', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('from_green_address', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('time', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confirmations', (array) $res->data->txs[0]);
-    
-            if(strcasecmp($type, 'sent') == 0)
-            {
+
+            if (strcasecmp($type, 'sent') == 0) {
                 $this->assertArrayHasKey('total_amount_sent', (array) $res->data->txs[0]);
                 $this->assertArrayHasKey('amounts_sent', (array) $res->data->txs[0]);
-            }
-            else
-            {
+            } else {
                 $this->assertArrayHasKey('amounts_received', (array) $res->data->txs[0]);
             }
-    
+
             $this->assertArrayHasKey('senders', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confidence', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('propagated_by_nodes', (array) $res->data->txs[0]);
@@ -801,12 +768,12 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function getTransactionsByUserIds()
     {
-        $type = array_rand(array('sent' => 0,'received' => 1));
-        $addresses = LaraBlockIo::getAddresses();;
+        $type = array_rand(['sent' => 0, 'received' => 1]);
+        $addresses = LaraBlockIo::getAddresses();
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
         $userId = $addresses[0]->user_id;
 
         $res = LaraBlockIo::getTransactionsByUserIds($type, $userId);
@@ -814,27 +781,23 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('txs', (array) $res->data);
-        
-        if(count($res->data->txs) > 0)
-        {
+
+        if (count($res->data->txs) > 0) {
             $this->assertArrayHasKey('txid', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('from_green_address', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('time', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confirmations', (array) $res->data->txs[0]);
-            if(strcasecmp($type, 'sent') == 0)
-            {
+            if (strcasecmp($type, 'sent') == 0) {
                 $this->assertArrayHasKey('total_amount_sent', (array) $res->data->txs[0]);
                 $this->assertArrayHasKey('amounts_sent', (array) $res->data->txs[0]);
-            }
-            else
-            {
+            } else {
                 $this->assertArrayHasKey('amounts_received', (array) $res->data->txs[0]);
             }
             $this->assertArrayHasKey('senders', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confidence', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('propagated_by_nodes', (array) $res->data->txs[0]);
         }
-        
+
         sleep(1);
 
         $this->expectException(Exception::class);
@@ -903,31 +866,28 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('green_txs', (array) $res->data);
-        if(count($res->data->green_txs) > 0)
-        {
+        if (count($res->data->green_txs) > 0) {
             $this->assertArrayHasKey('txid', (array) $res->data->green_txs[0]);
             $this->assertArrayHasKey('network', (array) $res->data->green_txs[0]);
         }
 
         sleep(1);
-
     }
 
     public function testGetNotConfirmedTxs()
     {
-        $addresses = LaraBlockIo::getAddresses();;
+        $addresses = LaraBlockIo::getAddresses();
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
 
         $toAddress = $addresses[0]->address;
         $confidenceThreshold = '0.99';
 
         $res = LaraBlockIo::getNotConfirmedTxs($toAddress, $confidenceThreshold);
 
-        if(count($res) > 0)
-        {
+        if (count($res) > 0) {
             $this->assertArrayHasKey('txid', (array) $res[0]);
             $this->assertArrayHasKey('from_green_address', (array) $res[0]);
             $this->assertArrayHasKey('time', (array) $res[0]);
@@ -937,7 +897,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
             $this->assertArrayHasKey('confidence', (array) $res[0]);
             $this->assertArrayHasKey('propagated_by_nodes', (array) $res[0]);
         }
-
 
         sleep(1);
 
@@ -974,12 +933,11 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('redeem_script', (array) $res->data);
 
         $addresses = LaraBlockIo::getAddresses();
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
 
         sleep(1);
 
-        if($addresses[0]->available_balance > .003)
-        {
+        if ($addresses[0]->available_balance > .003) {
             $amounts = 0.002;
             $fromAddresses = $addresses[0]->address;
             $toAddresses = LaraBlockIo::getDTrustInfoByLabel($this->getDTrustLabel())->data->address;
@@ -1022,7 +980,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetDTrustAddresses()
     {
-
         $res = LaraBlockIo::getDTrustAddresses();
 
         sleep(1);
@@ -1036,7 +993,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('available_balance', (array) $res->data->addresses[0]);
         $this->assertArrayHasKey('pending_received_balance', (array) $res->data->addresses[0]);
     }
-
 
     protected function getDTrustInfoByLabel()
     {
@@ -1061,27 +1017,26 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         sleep(1);
     }
 
-
     protected function multiSigWithdraw()
     {
         $addresses = LaraBlockIo::getAddresses();
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
 
         $label = $this->getDTrustLabel();
 
         $toAddress = $addresses[0]->address;
 
         $amount = .001;
-        
+
         $this->getNetworkDTrustFeeEstimate($amount, LaraBlockIo::getDTrustInfoByLabel($label)->data->address, $toAddress);
-        
+
         sleep(1);
-        
+
         $res = LaraBlockIo::multiSigWithdraw($label, $toAddress, $amount);
-        
+
         sleep(1);
 
         $reference_id = $res['reference_id'];
@@ -1097,7 +1052,7 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('encrypted_passphrase', (array) $res['response']->data);
 
         $this->signMultiSigWithdraw($reference_id);
-        
+
         sleep(1);
 
         $this->expectException(Exception::class);
@@ -1111,7 +1066,6 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->expectException(Exception::class);
         LaraBlockIo::multiSigWithdraw($label, $toAddress, $this->randomString());
         sleep(1);
-
     }
 
     protected function signMultiSigWithdraw($referenceId)
@@ -1122,8 +1076,7 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
         sleep(1);
 
-        if(is_numeric($res) && $res > 0)
-        {
+        if (is_numeric($res) && $res > 0) {
             $this->assertTrue(is_numeric($res) && $res > 0);
         }
 
@@ -1133,8 +1086,7 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
         sleep(1);
 
-        if(!is_numeric($res))
-        {
+        if (!is_numeric($res)) {
             $this->assertArrayHasKey('data', (array) $res);
             $this->assertArrayHasKey('network', (array) $res->data);
             $this->assertArrayHasKey('txid', (array) $res->data);
@@ -1203,12 +1155,12 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetDTrustTransactionsByAddress()
     {
-        $type = array_rand(array('sent' => 0,'received' => 1));
+        $type = array_rand(['sent' => 0, 'received' => 1]);
         $addresses = LaraBlockIo::getDTrustAddresses()->data->addresses;
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
         $address = $addresses[0]->address;
 
         $res = LaraBlockIo::getDTrustTransactionsByAddresses($type, $address);
@@ -1218,24 +1170,20 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('txs', (array) $res->data);
-        if(count($res->data->txs) > 0)
-        {
+        if (count($res->data->txs) > 0) {
             $this->assertArrayHasKey('txid', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('from_green_address', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('time', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confirmations', (array) $res->data->txs[0]);
-            if(strcasecmp($type, 'sent') == 0)
-            {
+            if (strcasecmp($type, 'sent') == 0) {
                 $this->assertArrayHasKey('total_amount_sent', (array) $res->data->txs[0]);
                 $this->assertArrayHasKey('amounts_sent', (array) $res->data->txs[0]);
-            }
-            else
-            {
+            } else {
                 $this->assertArrayHasKey('amounts_received', (array) $res->data->txs[0]);
             }
             $this->assertArrayHasKey('senders', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confidence', (array) $res->data->txs[0]);
-            $this->assertArrayHasKey('propagated_by_nodes', (array) $res->data->txs[0]);    
+            $this->assertArrayHasKey('propagated_by_nodes', (array) $res->data->txs[0]);
         }
 
         $this->expectException(Exception::class);
@@ -1251,12 +1199,12 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetDTrustTransactionsByLabels()
     {
-        $type = array_rand(array('sent' => 0,'received' => 1));
+        $type = array_rand(['sent' => 0, 'received' => 1]);
         $addresses = LaraBlockIo::getDTrustAddresses()->data->addresses;
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
         $label = $addresses[0]->label;
 
         $res = LaraBlockIo::getDTrustTransactionsByLabels($type, $label);
@@ -1266,26 +1214,22 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('txs', (array) $res->data);
-        if(count($res->data->txs) > 0)
-        {
+        if (count($res->data->txs) > 0) {
             $this->assertArrayHasKey('txid', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('from_green_address', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('time', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confirmations', (array) $res->data->txs[0]);
-            if(strcasecmp($type, 'sent') == 0)
-            {
+            if (strcasecmp($type, 'sent') == 0) {
                 $this->assertArrayHasKey('total_amount_sent', (array) $res->data->txs[0]);
                 $this->assertArrayHasKey('amounts_sent', (array) $res->data->txs[0]);
-            }
-            else
-            {
+            } else {
                 $this->assertArrayHasKey('amounts_received', (array) $res->data->txs[0]);
             }
             $this->assertArrayHasKey('senders', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confidence', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('propagated_by_nodes', (array) $res->data->txs[0]);
         }
-        
+
         $this->expectException(Exception::class);
         LaraBlockIo::getDTrustTransactionsByLabels($this->randomString(), $label);
 
@@ -1299,12 +1243,12 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
     public function testGetDTrustTransactionsByUserIds()
     {
-        $type = array_rand(array('sent' => 0,'received' => 1));
+        $type = array_rand(['sent' => 0, 'received' => 1]);
         $addresses = LaraBlockIo::getDTrustAddresses()->data->addresses;
 
         sleep(1);
 
-        usort($addresses, array($this, "cmp"));
+        usort($addresses, [$this, 'cmp']);
         $userId = $addresses[0]->user_id;
 
         $res = LaraBlockIo::getDTrustTransactionsByUserIds($type, $userId);
@@ -1314,19 +1258,15 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('txs', (array) $res->data);
-        if(count($res->data->txs) > 0)
-        {
+        if (count($res->data->txs) > 0) {
             $this->assertArrayHasKey('txid', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('from_green_address', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('time', (array) $res->data->txs[0]);
             $this->assertArrayHasKey('confirmations', (array) $res->data->txs[0]);
-            if(strcasecmp($type, 'sent') == 0)
-            {
+            if (strcasecmp($type, 'sent') == 0) {
                 $this->assertArrayHasKey('total_amount_sent', (array) $res->data->txs[0]);
                 $this->assertArrayHasKey('amounts_sent', (array) $res->data->txs[0]);
-            }
-            else
-            {
+            } else {
                 $this->assertArrayHasKey('amounts_received', (array) $res->data->txs[0]);
             }
             $this->assertArrayHasKey('senders', (array) $res->data->txs[0]);
@@ -1344,14 +1284,14 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
 
         sleep(1);
     }
-    
+
     public function testGetDTrustAddressBalance()
     {
         $address = LaraBlockIo::getDTrustAddresses()->data->addresses[0]->address;
         $res = LaraBlockIo::getDTrustAddressBalance($address);
-        
+
         sleep(1);
-        
+
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('balances', (array) $res->data);
@@ -1360,83 +1300,81 @@ class LaraBlockIoTest extends Orchestra\Testbench\TestCase
         $this->assertArrayHasKey('label', (array) $res->data->balances[0]);
         $this->assertArrayHasKey('available_balance', (array) $res->data->balances[0]);
         $this->assertArrayHasKey('pending_received_balance', (array) $res->data->balances[0]);
-        
+
         $this->expectException(Exception::class);
-        
+
         LaraBlockIo::getDTrustAddressBalance($this->randomString());
     }
-    
+
     public function testArchiveAndUnarchiveDTtrustAddresses()
     {
         $address = LaraBlockIo::getDTrustAddresses()->data->addresses[0]->address;
-        
+
         sleep(1);
-        
+
         $res = LaraBlockIo::archiveDTrustAddress($address);
-        
+
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('addresses', (array) $res->data);
         $this->assertArrayHasKey('address', (array) ($res->data->addresses[0]));
         $this->assertArrayHasKey('archived', (array) ($res->data->addresses[0]));
         $this->assertTrue($res->data->addresses[0]->archived == true);
-        
+
         sleep(1);
-        
+
         $res = LaraBlockIo::getArchivedDTrustAddresses();
-        
+
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('addresses', (array) $res->data);
         $this->assertArrayHasKey('address', (array) ($res->data->addresses[0]));
-        
+
         sleep(1);
-        
+
         $res = LaraBlockIo::unarchiveDTrustAddress($address);
-        
+
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('addresses', (array) $res->data);
         $this->assertArrayHasKey('address', (array) ($res->data->addresses[0]));
         $this->assertArrayHasKey('archived', (array) ($res->data->addresses[0]));
         $this->assertTrue($res->data->addresses[0]->archived == false);
-        
+
         $this->expectException(Exception::class);
         LaraBlockIo::unarchiveDTrustAddress($this->randomString());
         sleep(1);
-        
+
         $this->expectException(Exception::class);
         LaraBlockIo::archiveDTrustAddress($this->randomString());
         sleep(1);
-        
+
         $this->expectException(Exception::class);
         LaraBlockIo::getArchivedDTrustAddresses($this->randomString());
         sleep(1);
     }
-    
+
     protected function getNetworkDTrustFeeEstimate($amount, $fromAddress, $toAddress)
     {
         $res = LaraBlockIo::getNetworkDTrustFeeEstimate($amount, $fromAddress, $toAddress);
-        
+
         $this->assertArrayHasKey('data', (array) $res);
         $this->assertArrayHasKey('network', (array) $res->data);
         $this->assertArrayHasKey('estimated_network_fee', (array) $res->data);
-        
+
         sleep(1);
-        
+
         $this->expectException(Exception::class);
         LaraBlockIo::getNetworkDTrustFeeEstimate($this->randomString(), $fromAddress, $toAddress);
-        
+
         sleep(1);
-        
+
         $this->expectException(Exception::class);
         LaraBlockIo::getNetworkDTrustFeeEstimate($amount, $this->randomString(), $toAddress);
-        
+
         sleep(1);
-        
+
         $this->expectException(Exception::class);
         LaraBlockIo::getNetworkDTrustFeeEstimate($amount, $fromAddress, $this->randomString());
     }
 }
-
-?>
