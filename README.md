@@ -252,6 +252,10 @@ LaraBlockIo::getNetworkDTrustFeeEstimate($amounts, $fromAddress, $toAddress);
 // Sweep funds from external address to a BlockIo address.
 LaraBlockIo::sweepFromAddress($fromAddress, $toAddress, $privateKey);
 ```
+## Testing
+
+Unit Tests are created with PHPunit and orchestra/testbench, they can be ran with ./vendor/bin/phpunit.
+
 ## Contributing
 
 Find an area you can help with and do it. Open source is about collaboration and open participation. 
