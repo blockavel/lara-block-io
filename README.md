@@ -3,7 +3,6 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/hyn/multi-tenant/2.x/license.md)
 [![Build Status](https://travis-ci.org/blockavel/lara-block-io.svg?branch=master)](https://travis-ci.org/blockavel/lara-block-io)
 [![StyleCI](https://styleci.io/repos/83922877/shield?branch=master)](https://styleci.io/repos/83922877)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/blockavel/lara-block-io/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/blockavel/lara-block-io/?branch=master)
 
 A Laravel package/facade for the Block.io API PHP wrapper.
 
