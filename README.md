@@ -14,7 +14,7 @@ See [@BlockIo/block_io-php](https://github.com/BlockIo/block_io-php) and the [Bl
 
 Create an account at [Block.io](https://block.io/users/sign_up) and take note of your API key under Account > Dashboard.
 
-The BlockIo library requires the 'mcrypt', 'gmp', and 'cURL' extensions for PHP as well as the 'bcmath' library. To enable these, please see:
+The BlockIo library requires the 'mcrypt' (please note that mcrypt has been deprecated for php7.1), 'gmp', and 'cURL' extensions for PHP as well as the 'bcmath' library. To enable these, please see:
 
 -[mCrypt Installation Guide](http://php.net/manual/en/mcrypt.installation.php)
 
