@@ -46,15 +46,15 @@ class LaraBlockIo
         return $this->blockIo->get_balance();
     }
 
-     /**
-      * Get the Network associated with your API KEY.
-      *
-      * @return string Contains network information
-      */
-     public function getNetwork()
-     {
-         return $this->getBalanceInfo()->data->network;
-     }
+    /**
+     * Get the Network associated with your API KEY.
+     *
+     * @return string Contains network information
+     */
+    public function getNetwork()
+    {
+        return $this->getBalanceInfo()->data->network;
+    }
 
     /**
      * Get the total balance of your entire network.
